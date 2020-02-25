@@ -38,7 +38,7 @@ diaria a nivel estación, para la toma de decisiones.
 
 Para llevar a cabo el protecto se usará la información de afluencias
 registrada por la ciudad de méxico, dicha información puede obtenerse en
-**https://datos.cd** **mx.gob.mx**. Adicionalmente a esta información se
+**https://datos.cdmx.gob.mx**. Adicionalmente a esta información se
 está panteando utilizar la información correspondiente al número de
 viajes y llegadas de las ecobicis, esta información puede obtenerse en
 la página **https://www.ecobici.cdmx.gob.mx/**.
