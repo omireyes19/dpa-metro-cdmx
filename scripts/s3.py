@@ -15,7 +15,7 @@ class data_acq_task(luigi.Task):
     for req_year in years:
         for station in stations:
 
-            ses = boto3.session.Session(profile_name='default', region_name='us-east-1')
+            ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
             s3_resource = ses.resource('s3')
 
             obj = s3_resource.Bucket(self.bucket)
