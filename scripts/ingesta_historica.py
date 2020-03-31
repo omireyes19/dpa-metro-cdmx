@@ -12,8 +12,8 @@ class data_acq_task(luigi.Task):
     self.years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019']
     self.stations = ['Pantitlán']	
 	
-	for year in years:
-  		for station in stations:
+	for year in self.years:
+  		for station in self.stations:
 		    def run(self):
 		        ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		        s3_resource = ses.resource('s3')
