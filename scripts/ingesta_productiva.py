@@ -9,7 +9,8 @@ import os
 
 class data_acq_task(luigi.Task):
     bucket = 'dpa-metro'
-    fecha = '08/11/2015'
+    year = '2010'
+    station = 'Chabacano'
 
     def run(self):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
@@ -18,12 +19,10 @@ class data_acq_task(luigi.Task):
         obj = s3_resource.Bucket(self.bucket)
         print(ses)
 
-        api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-de-metrobus-cdmx&rows=-1&facet=" + self.fecha
-        #api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&rows=10000&sort=-fecha&facet=ano&facet=linea&facet=estacion&refine.ano=" + self.year + "&refine.estacion=" + self.station
+        api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&rows=10000&sort=-fecha&facet=ano&facet=linea&facet=estacion&refine.ano=" + self.year + "&refine.estacion=" + self.station
         r = requests.get(url = api_url)
         data = r.json()
         with self.output().open('w') as output_file:
-        #with s3.open(f"{'metro-dpa-dacq'}/'dpa-test' + station+'_'+req_year.json", 'w') as outfile:
             json.dump(data, output_file)
 
     def output(self):
