@@ -13,7 +13,7 @@ class data_acq_task(luigi.Task):
     station = 'Chabacano'
 
     def run(self):
-        ses = boto3.session.Session(profile_name='omar', region_name='us-west-2')
+        ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
         s3_resource = ses.resource('s3')
 
         obj = s3_resource.Bucket(self.bucket)
