@@ -8,7 +8,7 @@ import glob
 import os
 
 class data_acq_task(luigi.Task):
-    bucket = 'dpa-metro'
+    self.bucket = 'dpa-metro'
 		
 	def run(self):
 		years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019']
