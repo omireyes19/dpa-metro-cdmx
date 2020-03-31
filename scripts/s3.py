@@ -8,7 +8,7 @@ import glob
 import os
 
 class data_acq_task(luigi.Task):
-    bucket = 'metro'
+    bucket = 'dpa-metro'
     year = '2010'
     station = 'Chabacano'
 
