@@ -9,8 +9,8 @@ import os
 
 class data_acq_task(luigi.Task):
     bucket = 'dpa-metro'
-    year = '2010'
-    station = 'Chabacano'
+    year = luigi.Parameter()
+    station = luigi.Parameter()
 
     def run(self):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
@@ -26,8 +26,8 @@ class data_acq_task(luigi.Task):
             json.dump(data, output_file)
 
     def output(self):
-        output_path = "s3://{}/YEAR={}/STATION={}/test.json".\
-        format(self.bucket,self.year,self.station)
+        output_path = "s3://{}/YEAR={}/STATION={}/{}.json".\
+        format(self.bucket,self.year,self.station,self.year+self.station)
 
         return luigi.contrib.s3.S3Target(path=output_path)
 
