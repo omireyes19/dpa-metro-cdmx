@@ -7,26 +7,29 @@ import glob
 import os
 
 class data_acq_task(luigi.Task):
+    self.bucket = 'metro'
+    self.year = '2010'
+    self.station = 'Chabacano'
 
-  def run(self):
-    years = ['2010', '2011']
-    stations = ["Chabacano"]
+    def run(self):
+        ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
+        s3_resource = ses.resource('s3')
 
-    for req_year in years:
-        for station in stations:
+        obj = s3_resource.Bucket(self.bucket)
+        print(ses)
 
-            ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
-            s3_resource = ses.resource('s3')
+        api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&rows=10000&sort=-fecha&facet=ano&facet=linea&facet=estacion&refine.ano=" + self.year + "&refine.estacion=" + self.station
+        r = requests.get(url = api_url)
+        data = r.json()
+        with self.output().open('w') as output_file:
+        #with s3.open(f"{'metro-dpa-dacq'}/'dpa-test' + station+'_'+req_year.json", 'w') as outfile:
+            json.dump(data, output_file)
 
-            obj = s3_resource.Bucket("metro-dpa")
-            print(ses)
+    def output(self):
+        output_path = "s3://{}/YEAR={}/STATION={}/test.json".\
+        format(self.bucket,self.year,self.station)
 
-            api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&rows=10000&sort=-fecha&facet=ano&facet=linea&facet=estacion&refine.ano=" + req_year + "&refine.estacion=" + station
-            r = requests.get(url = api_url)
-            data = r.json()
-            with s3.open('metro-dpa-dacq/dpa-test'+station+'_'+req_year+'.json', 'w') as outfile:
-            #with s3.open(f"{'metro-dpa-dacq'}/'dpa-test' + station+'_'+req_year.json", 'w') as outfile:
-                json.dump(data, outfile)
+        return luigi.contrib.s3.S3Target(path=output_path)
 
 if __name__ == '__main__':
     luigi.run()
