@@ -7,9 +7,9 @@ import glob
 import os
 
 class data_acq_task(luigi.Task):
-    self.bucket = 'metro'
-    self.year = '2010'
-    self.station = 'Chabacano'
+    bucket = 'metro'
+    year = '2010'
+    station = 'Chabacano'
 
     def run(self):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
