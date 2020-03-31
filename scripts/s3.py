@@ -1,5 +1,6 @@
 import requests
 import luigi
+import luigi.contrib.s3
 import boto3
 import s3fs
 import json
