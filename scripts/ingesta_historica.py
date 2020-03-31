@@ -9,12 +9,13 @@ import os
 
 class data_acq_task(luigi.Task):
     bucket = 'dpa-metro'
-    self.years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019']
-    self.stations = ['Pantitlán']	
-	
-	for year in self.years:
-  		for station in self.stations:
-		    def run(self):
+		
+	def run(self):
+		years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019']
+    	stations = ['Pantitlán']
+
+    	for year in years:
+			for station in stations:
 		        ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		        s3_resource = ses.resource('s3')
 
@@ -28,10 +29,10 @@ class data_acq_task(luigi.Task):
 		        #with s3.open(f"{'metro-dpa-dacq'}/'dpa-test' + station+'_'+req_year.json", 'w') as outfile:
 		            json.dump(data, output_file)
 
-		    def output(self):
-		        output_path = "s3://{}/YEAR={}/STATION={}/{}.json".\
-		        format(self.bucket,year,station,year+station)
-		        return luigi.contrib.s3.S3Target(path=output_path)
+    def output(self):
+        output_path = "s3://{}/YEAR={}/STATION={}/{}.json".\
+        format(self.bucket,year,station,year+station)
+        return luigi.contrib.s3.S3Target(path=output_path)
 
 if __name__ == '__main__':
     luigi.run()
