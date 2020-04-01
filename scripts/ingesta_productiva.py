@@ -42,7 +42,7 @@ class data_acq_metadata(luigi.Task):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
         s3_resource = ses.resource('s3')
 
-        obj = s3_resource.Bucket(self.bucket)
+        obj = s3_resource.Bucket(self.bucket_metadata)
         print(ses)
 
         api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&rows=10000&sort=-fecha&facet=ano&facet=linea&facet=estacion&refine.ano=" + self.year + "&refine.estacion=" + self.station
