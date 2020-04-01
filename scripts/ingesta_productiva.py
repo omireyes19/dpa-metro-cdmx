@@ -32,16 +32,14 @@ class data_acq_task(luigi.Task):
         with self.output_metadata().open('w') as output_file:
             output_file.write("test,luigi,s3")
 
-    def output(self):
-        output_path = "s3://{}/YEAR={}/STATION={}/{}.json".\
-        format(self.bucket,self.year,self.station,self.year+self.station)
-
-        return luigi.contrib.s3.S3Target(path=output_path)
+    #def output(self):
+    #    output_path = "s3://{}/YEAR={}/STATION={}/{}.json".\
+    #    format(self.bucket,self.year,self.station,self.year+self.station)
+    #    return luigi.contrib.s3.S3Target(path=output_path)
 
     def output_metadata(self):
         output_path = "s3://{}/DATE={}/{}.csv".\
         format(self.bucket_metadata,str(self.today),str(self.today))
-
         return luigi.contrib.s3.S3Target(path=output_path)
 
 if __name__ == '__main__':
