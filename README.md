@@ -91,6 +91,18 @@ chmod +x create_virtualenv.sh
 
 ###  Consideraciones generales para producción.
 
+###  Linaje de datos.
+#### 1. Extracción: Obtenemos los datos de la API de Datos Abiertos Ciudad de México.
+#### 2. Loading: Subimos los datos a S3 en carpetas nombradas de acuerdo a la fecha con archivos en formato json con procesamiento en EC2. El layout contiene las variables: 
+* Fecha: fecha a la que corresponden los datos en formato DD/MM/YYYY.
+* Año: año al que corresponden los datos.
+* Línea: nombre de la línea a la que corresponde la estación.
+* Estación: nombre de la estación.
+* Afluencia: número de personas que entran a la estación.
+
+#### 3. Transformation: Usamos Zeppeling para transformar los datos de json a parquet porque le damos una estructura hdfs. La estructura de directorios está definida por el particionamiento de las variables *fecha* y *estación*. Además, añadimos variables dicotómicas correspondientes a día de la semana, día festivo y fin de semana.
+
+
 ## Planteamiento del entregable del proyecto
 
 De manera tentativa se entregará una interfaz, donde el usuario consulte
