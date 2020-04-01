@@ -45,13 +45,8 @@ class data_acq_metadata(luigi.Task):
         obj = s3_resource.Bucket(self.bucket_metadata)
         print(ses)
 
-        api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&rows=10000&sort=-fecha&facet=ano&facet=linea&facet=estacion&refine.ano=" + self.year + "&refine.estacion=" + self.station
-        r = requests.get(url = api_url)
-        data = r.json()
-
         with self.output_metadata().open('w') as output_file:
-            output_file.write("{},{},{}")
-            format(self.today,self.year,self.station)
+            output_file.write(str(today)+","+self.year+","+self.station)
 
     def output_metadata(self):
         output_path = "s3://{}/DATE={}/{}.csv".\
