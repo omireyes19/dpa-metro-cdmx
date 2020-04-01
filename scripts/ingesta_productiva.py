@@ -46,7 +46,7 @@ class data_acq_metadata(luigi.Task):
         print(ses)
 
         with self.output_metadata().open('w') as output_file:
-            output_file.write(str(today)+","+self.year+","+self.station)
+            output_file.write(str(self.today)+","+self.year+","+self.station)
 
     def output_metadata(self):
         output_path = "s3://{}/DATE={}/{}.csv".\
