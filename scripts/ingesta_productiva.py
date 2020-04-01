@@ -26,8 +26,8 @@ class data_acq_task(luigi.Task):
         r = requests.get(url = api_url)
         data = r.json()
 
-        with self.output().open('w') as output_file:
-            json.dump(data, output_file)
+    #    with self.output().open('w') as output_file:
+    #        json.dump(data, output_file)
 
         with self.output_metadata().open('w') as output_file:
             output_file.write("test,luigi,s3")
