@@ -1,0 +1,57 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Apr  5 16:32:23 2020
+
+@author: card1
+"""
+import requests
+import luigi
+#import luigi.contrib.s3
+#import boto3
+#import s3fs
+import json
+import glob
+import os
+import pandas as pd
+from datetime import date
+
+class data_acq_task(luigi.Task):
+    bucket = 'dpa-metro'
+    DB = list()
+    Tabla=pd.DataFrame(columns=['anio','mes','dia','linea','estacion','afluencia'] )
+    year = luigi.Parameter()
+    station = luigi.Parameter()
+    def run(self):
+        
+        self.station=self.station.split(' ')
+        
+        print(self.station)
+        for estacion in self.station:
+            api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&rows=10000&sort=-fecha&facet=ano&facet=linea&facet=estacion&refine.ano=" + self.year + "&refine.estacion=" + estacion
+            print(api_url)
+            print(estacion)
+            r = requests.get(url = api_url)
+            data = r.json()
+            for item in data['records']:
+                estacion=item['fields']['estacion']
+                fecha=item['fields']['fecha']
+                linea=item['fields']['linea']
+                afluencia=item['fields']['afluencia']
+                fecha2=fecha.split('-')    
+                self.Tabla = self.Tabla.append({'anio':fecha2[0],'mes':fecha2[1],'dia':fecha2[2],'linea':linea,'estacion':estacion,'afluencia':afluencia} , ignore_index=True)
+        print(self.Tabla)        
+        self.station=''.join(self.station)
+        print("status ok********************************")
+        print(type(self.Tabla))
+        with self.output().open('w') as output_file:
+            self.Tabla.to_csv(output_file)
+            print("status ok2222********************************")
+    
+    def output(self):
+        pass
+        output_path = "D://python//output//Archivo.csv"
+        return luigi.LocalTarget(path=output_path)
+if __name__ == '__main__':
+    luigi.run()
+
+
