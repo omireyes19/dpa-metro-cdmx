@@ -11,8 +11,8 @@ from calendar import monthrange
 
 class data_acq_task(luigi.Task):
 	bucket = 'dpa-metro'
-	year = luigi.Parameter()
-	month = luigi.Parameter()
+	year = luigi.IntParameter()
+	month = luigi.IntParameter()
 	station = luigi.Parameter()
 
 	def run(self):
