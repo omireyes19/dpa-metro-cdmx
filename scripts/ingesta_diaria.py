@@ -23,19 +23,22 @@ class data_acq_task(luigi.Task):
         print(ses)
 
         days_in_month = monthrange(self.year, self.month)[1]
-        print(self.days_in_month)
+        print(days_in_month)
 
-        api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&sort=-fecha&facet=fecha&facet=linea&facet=estacion&refine.fecha=2018-01-01&refine.estacion=Balbuena"
+        for day in range(days_in_month):
+        	date = str(self.year)+"-"+str(self.month).zfill(2)+"-"+str(day).zfill(2)
 
-        r = requests.get(url = api_url)
-        data = r.json()
+	        api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&sort=-fecha&facet=fecha&facet=linea&facet=estacion&refine.fecha="+date+"&refine.estacion="+station
 
-        with self.output().open('w') as output_file:
-            json.dump(data, output_file)
+	        r = requests.get(url = api_url)
+	        data = r.json()
 
-    def output(self):
-        output_path = "s3://{}/YEAR={}/STATION={}/{}.json".\
-        format(self.bucket,self.year,self.station,self.year+self.station)
+	        with self.output(date).open('w') as output_file:
+	            json.dump(data, output_file)
+
+    def output(self,date):
+        output_path = "s3://{}/information_date={}/station={}/{}.json".\
+        format(self.bucket,date,date+self.station)
         return luigi.contrib.s3.S3Target(path=output_path)
 
 class data_acq_metadata(luigi.Task):
