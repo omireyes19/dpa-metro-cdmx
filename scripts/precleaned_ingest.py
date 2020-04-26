@@ -6,6 +6,7 @@ import s3fs
 import json
 import glob
 import os
+import pandas as pd
 from datetime import date
 from raw_ingest import raw_task
 from calendar import monthrange
@@ -23,27 +24,19 @@ class precleaned_task(luigi.Task):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		obj = s3_resource.Bucket(self.bucket)
+		obj = s3_resource.Object(self.bucket,"/information_year_month={}/station={}/{}.json".format(str(self.year)+'-'+str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
 		print(ses)
 
-		days_in_month = monthrange(self.year, self.month)[1]
-
-		records = []
-		for day in range(days_in_month):
-			fecha = str(self.year)+"-"+str(self.month).zfill(2)+"-"+str(day+1).zfill(2)
-			api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&sort=-fecha&facet=fecha&facet=linea&facet=estacion&refine.fecha="+fecha+"&refine.estacion="+self.station
-
-			r = requests.get(url = api_url)
-			data = r.json()
-
-			for obs in data["records"]:
-				records.append(obs["fields"])
+		file_content = obj.get()['Body'].read().decode('utf-8')
+		json_content = json.loads(file_content)
 
 		with self.output().open('w') as output_file:
-			json.dump(records, output_file)
+			df = pd.DataFrame(json_content)[["fecha","linea","afluencia"]]
+			df.columns = ["date","line","influx"]
+			df.to_parquet(output_file)
 
 	def output(self):
-		output_path = "s3://{}/information_year_month={}/station={}/{}.json".\
+		output_path = "s3://{}/information_year_month={}/station={}/{}.parquet".\
 		format(self.bucket,str(self.year)+'-'+str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return luigi.contrib.s3.S3Target(path=output_path)
 
