@@ -10,19 +10,19 @@ from datetime import date
 from calendar import monthrange
 
 class data_acq_task(luigi.Task):
-    bucket = 'dpa-metro'
-    year = luigi.Parameter()
-    month = luigi.Parameter()
-    station = luigi.Parameter()
+	bucket = 'dpa-metro'
+	year = luigi.Parameter()
+	month = luigi.Parameter()
+	station = luigi.Parameter()
 
-    def run(self):
-        ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
-        s3_resource = ses.resource('s3')
+	def run(self):
+		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
+		s3_resource = ses.resource('s3')
 
-        obj = s3_resource.Bucket(self.bucket)
-        print(ses)
+		obj = s3_resource.Bucket(self.bucket)
+		print(ses)
 
-        days_in_month = monthrange(self.year, self.month)[1]
+		days_in_month = monthrange(self.year, self.month)[1]
 
 		records = []
 		for day in range(days_in_month):
