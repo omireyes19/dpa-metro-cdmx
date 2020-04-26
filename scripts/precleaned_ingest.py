@@ -16,7 +16,7 @@ class precleaned_task(luigi.Task):
 	station = luigi.Parameter()
 
 	def requires(self):
-        return raw_task(self.year,self.month)
+		return raw_task(self.year,self.month)
 
 	def run(self):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
