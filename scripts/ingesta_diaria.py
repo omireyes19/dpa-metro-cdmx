@@ -26,19 +26,19 @@ class data_acq_task(luigi.Task):
         print(days_in_month)
 
         for day in range(days_in_month):
-        	date = str(self.year)+"-"+str(self.month).zfill(2)+"-"+str(day).zfill(2)
+        	self.fecha = str(self.year)+"-"+str(self.month).zfill(2)+"-"+str(day).zfill(2)
 
-	        api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&sort=-fecha&facet=fecha&facet=linea&facet=estacion&refine.fecha="+date+"&refine.estacion="+station
+	        api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&sort=-fecha&facet=fecha&facet=linea&facet=estacion&refine.fecha="+self.fecha+"&refine.estacion="+self.station
 
 	        r = requests.get(url = api_url)
 	        data = r.json()
 
-	        with self.output(date).open('w') as output_file:
+	        with self.output().open('w') as output_file:
 	            json.dump(data, output_file)
 
-    def output(self,date):
+    def output(self):
         output_path = "s3://{}/information_date={}/station={}/{}.json".\
-        format(self.bucket,date,date+self.station)
+        format(self.bucket,self.fecha,self.fecha+self.station)
         return luigi.contrib.s3.S3Target(path=output_path)
 
 class data_acq_metadata(luigi.Task):
