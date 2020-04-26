@@ -1,6 +1,6 @@
 while read i
 do
-	for j in $(seq 2018 2020)
+	for j in $(seq 2018 2019)
 	do
 		for k in $(seq 1 12)
 		do
