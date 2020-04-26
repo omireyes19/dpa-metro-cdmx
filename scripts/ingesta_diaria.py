@@ -10,7 +10,7 @@ from datetime import date
 from calendar import monthrange
 
 class data_acq_task(luigi.Task):
-	bucket = 'dpa-metro'
+	bucket = 'dpa-metro-raw'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
 	station = luigi.Parameter()
@@ -44,7 +44,7 @@ class data_acq_task(luigi.Task):
 		return luigi.contrib.s3.S3Target(path=output_path)
 
 class data_acq_metadata(luigi.Task):
-    bucket_metadata = 'dpa-metro-metadata'
+    bucket_metadata = 'dpa-metro-raw-metadata'
     today = date.today().strftime("%d%m%Y")
     year = luigi.Parameter()
     station = luigi.Parameter()
