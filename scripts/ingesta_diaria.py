@@ -32,7 +32,7 @@ class data_acq_task(luigi.Task):
 	        r = requests.get(url = api_url)
 	        data = r.json()
 
-	        with self.output(fecha).open('w') as output_file:
+	        with self.output(self,fecha).open('w') as output_file:
 	            json.dump(data, output_file)
 
     def output(self,fecha):
