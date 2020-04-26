@@ -4,7 +4,7 @@ do
 	do
 		for k in $(seq 1 12)
 		do
-			echo "PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year $j --month $k --station $i --local-scheduler"
+			PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year $j --month $k --station $i --local-scheduler
 		done
 	done
 done < ./estaciones.txt
