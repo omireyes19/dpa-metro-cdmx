@@ -8,6 +8,7 @@ import glob
 import os
 from datetime import date
 from raw_ingest import raw_task
+from calendar import monthrange
 
 class precleaned_task(luigi.Task):
 	bucket = 'dpa-metro-precleaned'
