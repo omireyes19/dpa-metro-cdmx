@@ -14,7 +14,6 @@ class data_acq_task(luigi.Task):
     year = luigi.Parameter()
     month = luigi.Parameter()
     station = luigi.Parameter()
-    days_in_month = monthrange(year, month)[1]
 
     def run(self):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
@@ -23,6 +22,7 @@ class data_acq_task(luigi.Task):
         obj = s3_resource.Bucket(self.bucket)
         print(ses)
 
+        days_in_month = monthrange(self.year, self.month)[1]
         print(self.days_in_month)
 
         api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&sort=-fecha&facet=fecha&facet=linea&facet=estacion&refine.fecha=2018-01-01&refine.estacion=Balbuena"
