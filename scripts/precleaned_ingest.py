@@ -33,10 +33,10 @@ class precleaned_task(luigi.Task):
 		with self.output().open('w') as output_file:
 			df = pd.DataFrame(json_content)[["fecha","linea","afluencia"]]
 			df.columns = ["date","line","influx"]
-			df.to_parquet(output_file)
+			df.to_csv(output_file)
 
 	def output(self):
-		output_path = "s3://{}/information_year_month={}/station={}/{}.parquet".\
+		output_path = "s3://{}/information_year_month={}/station={}/{}.csv".\
 		format(self.bucket,str(self.year)+'-'+str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return luigi.contrib.s3.S3Target(path=output_path)
 
