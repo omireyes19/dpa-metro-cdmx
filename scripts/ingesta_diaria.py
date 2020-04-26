@@ -40,7 +40,7 @@ class data_acq_task(luigi.Task):
 
 	def output(self):
 		output_path = "s3://{}/information_year_month={}/station={}/{}.json".\
-		format(self.bucket,str(self.year)+"-"+str(self.month).zfill(2),self.station,str(self.year)+"-"+str(self.month).zfill(2)+self.station.replace(" ", "")
+		format(self.bucket,str(self.year)+'-'+str(self.month).zfill(2),self.station,str(self.year)+'-'+str(self.month).zfill(2)+self.station.replace(' ', ''))
 		return luigi.contrib.s3.S3Target(path=output_path)
 
 class data_acq_metadata(luigi.Task):
