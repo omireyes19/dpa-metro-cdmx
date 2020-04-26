@@ -10,7 +10,7 @@ from datetime import date
 from raw_ingest import raw_task
 from io import StringIO
 
-class precleaned_task(luigi.Task):
+class cleaned_task(luigi.Task):
 	bucket = 'dpa-metro-cleaned'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
@@ -37,7 +37,7 @@ class precleaned_task(luigi.Task):
 		format(self.bucket,str(self.year)+'-'+str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return luigi.contrib.s3.S3Target(path=output_path)
 
-class precleaned_task_metadata(luigi.Task):
+class cleaned_task_metadata(luigi.Task):
     bucket_metadata = 'dpa-metro-cleaned-metadata'
     today = date.today().strftime("%d%m%Y")
     year = luigi.Parameter()
