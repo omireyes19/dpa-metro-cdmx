@@ -24,7 +24,7 @@ class precleaned_task(luigi.Task):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		obj = s3_resource.Object(self.bucket,"/information_year_month={}/station={}/{}.json".format(str(self.year)+'-'+str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
+		obj = s3_resource.Object("dpa-metro-raw","/information_year_month={}/station={}/{}.json".format(str(self.year)+'-'+str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
 		print(ses)
 
 		file_content = obj.get()['Body'].read().decode('utf-8')
