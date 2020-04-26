@@ -9,6 +9,8 @@ import pandas as pd
 from datetime import date
 from precleaned_ingest import precleaned_task
 from io import StringIO
+import datetime
+from workalendar.america import Mexico
 
 class cleaned_task(luigi.Task):
 	bucket = 'dpa-metro-cleaned'
@@ -28,6 +30,13 @@ class cleaned_task(luigi.Task):
 
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		df = pd.read_csv(StringIO(file_content))
+
+		cal = Mexico()
+
+		df["date"] = pd.to_datetime(df['date'])
+		df["day_of_week"] = df["date"].dt.dayofweek
+
+		df['holiday'] = df.date.apply(lambda x: cal.is_working_day(x))
 
 		with self.output().open('w') as output_file:
 			df.to_csv(output_file)
