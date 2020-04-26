@@ -7,13 +7,16 @@ import json
 import glob
 import os
 from datetime import date
-from calendar import monthrange
+from raw_ingest.py import raw_task
 
-class data_acq_task(luigi.Task):
-	bucket = 'dpa-metro-raw'
+class precleaned_task(luigi.Task):
+	bucket = 'dpa-metro-precleaned'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
 	station = luigi.Parameter()
+
+	def requires(self):
+        return raw_task(self.year,self.month)
 
 	def run(self):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
@@ -43,8 +46,8 @@ class data_acq_task(luigi.Task):
 		format(self.bucket,str(self.year)+'-'+str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return luigi.contrib.s3.S3Target(path=output_path)
 
-class data_acq_metadata(luigi.Task):
-    bucket_metadata = 'dpa-metro-raw-metadata'
+class precleaned_task_metadata(luigi.Task):
+    bucket_metadata = 'dpa-metro-precleaned-metadata'
     today = date.today().strftime("%d%m%Y")
     year = luigi.Parameter()
     station = luigi.Parameter()
