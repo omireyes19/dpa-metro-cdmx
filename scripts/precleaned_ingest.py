@@ -7,7 +7,7 @@ import json
 import glob
 import os
 from datetime import date
-from raw_ingest.py import raw_task
+from raw_ingest import raw_task
 
 class precleaned_task(luigi.Task):
 	bucket = 'dpa-metro-precleaned'
