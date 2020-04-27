@@ -5,6 +5,6 @@ do
 		while read k
 		do
 			PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year $i --month $j --station $k --local-scheduler
-		done
+		done < ./estaciones.txt
 	done
-done < ./estaciones.txt
+done
