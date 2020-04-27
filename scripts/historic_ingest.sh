@@ -1,10 +1,10 @@
-while read i
+for i in $(seq 2018 2019)
 do
-	for j in $(seq 2018 2019)
+	for j in $(seq 1 12)
 	do
-		for k in $(seq 1 12)
+		while read k
 		do
-			PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year $j --month $k --station $i --local-scheduler
+			PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year $i --month $j --station $k --local-scheduler
 		done
 	done
 done < ./estaciones.txt
