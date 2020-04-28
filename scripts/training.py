@@ -26,7 +26,7 @@ class training_task(PySparkTask):
 		}
 
 	def main(self,sc):
-		sc.textFile(self.input().path).flatMap(lambda line: line.split()).map(lambda word: (word, 1)).reduceByKey(lambda a, b: a + b)
+		sc.textFile(self.input()["data"].path).flatMap(lambda line: line.split()).map(lambda word: (word, 1)).reduceByKey(lambda a, b: a + b)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
