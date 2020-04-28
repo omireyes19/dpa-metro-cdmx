@@ -26,6 +26,8 @@ class training_task(PySparkTask):
 	def main(self,sc):
 		line = "line"
 		station = "station"
+		year = "year"
+		month = "month"
 		influx = "influx"
 		q3 = "percentile_0.75"
 		q1 = "percentile_0.25"
@@ -46,7 +48,7 @@ class training_task(PySparkTask):
 		df = pd.read_csv(StringIO(file_content))
 
 		df[year] = self.year
-		d[month] = self.month
+		df[month] = self.month
 		df[station] = self.station
 
 		n = floor(df.shape[0] * .7)
