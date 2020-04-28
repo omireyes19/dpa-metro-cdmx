@@ -129,8 +129,7 @@ class training_task_metadata(luigi.Task):
 			output_file.write(str(self.today)+","+self.year+","+self.month+","+self.station)
 
 	def output_metadata(self):
-	output_path = "s3://{}/training/DATE={}/{}.csv".\
-	format(self.bucket_metadata,str(self.today),str(self.today))
+	output_path = "s3://{}/training/DATE={}/{}.csv".format(self.bucket_metadata,str(self.today),str(self.today))
 	return luigi.contrib.s3.S3Target(path=output_path)
 
 import sys
