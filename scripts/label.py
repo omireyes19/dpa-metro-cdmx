@@ -26,6 +26,8 @@ class label_task(PySparkTask):
 	def main(self,sc):
 		line = "line"
 		station = "station"
+		year = "year"
+		month = "month"
 		influx = "influx"
 		q3 = "percentile_0.75"
 		q1 = "percentile_0.25"
@@ -39,14 +41,14 @@ class label_task(PySparkTask):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		obj = s3_resource.Object("dpa-metro-precleaned","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
+		obj = s3_resource.Object("dpa-metro-cleaned","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
 		print(ses)
 
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		df = pd.read_csv(StringIO(file_content))
 
 		df[year] = self.year
-		d[month] = self.month
+		df[month] = self.month
 		df[station] = self.station
 
 		n = floor(df.shape[0] * .7)
