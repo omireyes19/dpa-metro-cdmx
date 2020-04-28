@@ -44,10 +44,14 @@ class raw_task(luigi.Task):
 		return luigi.contrib.s3.S3Target(path=output_path)
 
 class raw_task_metadata(luigi.Task):
-    bucket_metadata = 'dpa-metro-raw-metadata'
+    bucket_metadata = 'dpa-metro-metadata'
     today = date.today().strftime("%d%m%Y")
     year = luigi.Parameter()
+    month = luigi.Parameter()
     station = luigi.Parameter()
+
+    def requires(self):
+		return raw_task(self.year,self.month,self.station)
 
     def run(self):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
@@ -57,10 +61,10 @@ class raw_task_metadata(luigi.Task):
         print(ses)
 
         with self.output_metadata().open('w') as output_file:
-            output_file.write(str(self.today)+","+self.year+","+self.station)
+            output_file.write(str(self.today)+","+self.year+","+self.month+","+self.station)
 
     def output_metadata(self):
-        output_path = "s3://{}/DATE={}/{}.csv".\
+        output_path = "s3://{}/raw/DATE={}/{}.csv".\
         format(self.bucket_metadata,str(self.today),str(self.today))
         return luigi.contrib.s3.S3Target(path=output_path)
 
