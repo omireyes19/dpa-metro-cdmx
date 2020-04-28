@@ -33,7 +33,7 @@ class training_task(PySparkTask):
 		print(ses)
 
 		file_content = obj.get()['Body'].read().decode('utf-8')
-		data = spark.read.csv(StringIO(file_content),header="true")
+		df = pd.read_csv(StringIO(file_content))
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
