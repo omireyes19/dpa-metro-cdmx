@@ -123,7 +123,7 @@ class training_task_metadata(luigi.Task):
 		s3_resource = ses.resource('s3')
 
 		obj = s3_resource.Bucket(self.bucket_metadata)
-	print(ses)
+		print(ses)
 
 		with self.output_metadata().open('w') as output_file:
 			output_file.write(str(self.today)+","+self.year+","+self.month+","+self.station)
