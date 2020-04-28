@@ -44,8 +44,8 @@ class training_task(PySparkTask):
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		df = pd.read_csv(StringIO(file_content))
 
-		df[year] = self.year
-		df[month] = self.month
+		df["year"] = self.year
+		df["month"] = self.month
 
 		data = spark.createDataFrame(df)
 
