@@ -5,6 +5,7 @@ import boto3
 import s3fs
 import glob
 import os
+from datetime import date
 from cleaned_ingest import cleaned_task_metadata
 from io import StringIO
 import pandas as pd
