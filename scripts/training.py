@@ -20,13 +20,17 @@ class training_task(PySparkTask):
 	station = luigi.Parameter()
 
 	def input(self):
-		return {
-			"data": S3Target("s3://dpa-metro-cleaned"),
-			"task": cleaned_task(self.year,self.month,self.station)
-		}
+		return cleaned_task(self.year,self.month,self.station)
 
 	def main(self,sc):
-		sc.textFile(self.input()["data"].path).flatMap(lambda line: line.split()).map(lambda word: (word, 1)).reduceByKey(lambda a, b: a + b)
+		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
+		s3_resource = ses.resource('s3')
+
+		obj = s3_resource.Object("dpa-metro-precleaned","")
+		print(ses)
+
+		file_content = obj.get()['Body'].read().decode('utf-8')
+		df = pd.read_csv(StringIO(file_content))
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
