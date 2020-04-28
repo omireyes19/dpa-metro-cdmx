@@ -95,13 +95,18 @@ class training_task(PySparkTask):
 
 		predictions = cvModel.transform(testingData).toPandas()
 
-		with self.output().open('w') as output_file:
+		with self.output()["output"].open('w') as output_file:
 			predictions.to_csv(output_file)
+
+		cvModel.bestModel.save(self.output()["model"])
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		return luigi.contrib.s3.S3Target(path=output_path)
+
+		model_path = "s3://{}/year={}/month={}/station={}/{}".\
+		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
+		return {"output":luigi.contrib.s3.S3Target(path=output_path), "model":luigi.contrib.s3.S3Target(path=model_path)}
 
 import sys
 from pyspark import SparkContext
