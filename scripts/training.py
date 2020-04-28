@@ -26,7 +26,7 @@ class training_task(PySparkTask):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		obj = s3_resource.Object("dpa-metro-precleaned","year=2018")
+		obj = s3_resource.Object("dpa-metro-precleaned","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
 		print(ses)
 
 		file_content = obj.get()['Body'].read().decode('utf-8')
