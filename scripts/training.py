@@ -87,7 +87,7 @@ class training_task(PySparkTask):
 			.build()
 
 		crossval = CrossValidator(estimator=rf,
-                          estimatorParamMaps=paramGrid,
+				   	  estimatorParamMaps=paramGrid,
                           evaluator=MulticlassClassificationEvaluator(),
                           numFolds=3)
 
@@ -109,29 +109,29 @@ class training_task(PySparkTask):
 		return {"output":luigi.contrib.s3.S3Target(path=output_path), "model":luigi.contrib.s3.S3Target(path=model_path)}
 
 class training_task_metadata(luigi.Task):
-    bucket_metadata = 'dpa-metro-metadata'
-    today = date.today().strftime("%d%m%Y")
-    year = luigi.Parameter()
-    month = luigi.Parameter()
-    station = luigi.Parameter()
+	bucket_metadata = 'dpa-metro-metadata'
+	today = date.today().strftime("%d%m%Y")
+	year = luigi.Parameter()
+	month = luigi.Parameter()
+	station = luigi.Parameter()
 
-    def requires(self):
+	def requires(self):
 		return training_task(self.year,self.month,self.station)
 
-    def run(self):
-        ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
-        s3_resource = ses.resource('s3')
+	def run(self):
+		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
+		s3_resource = ses.resource('s3')
 
-        obj = s3_resource.Bucket(self.bucket_metadata)
-        print(ses)
+		obj = s3_resource.Bucket(self.bucket_metadata)
+	print(ses)
 
-        with self.output_metadata().open('w') as output_file:
-            output_file.write(str(self.today)+","+self.year+","+self.month+","+self.station)
+		with self.output_metadata().open('w') as output_file:
+			output_file.write(str(self.today)+","+self.year+","+self.month+","+self.station)
 
-    def output_metadata(self):
-        output_path = "s3://{}/training/DATE={}/{}.csv".\
-        format(self.bucket_metadata,str(self.today),str(self.today))
-        return luigi.contrib.s3.S3Target(path=output_path)
+	def output_metadata(self):
+	output_path = "s3://{}/training/DATE={}/{}.csv".\
+	format(self.bucket_metadata,str(self.today),str(self.today))
+	return luigi.contrib.s3.S3Target(path=output_path)
 
 import sys
 from pyspark import SparkContext
