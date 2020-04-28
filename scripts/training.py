@@ -12,6 +12,7 @@ import numpy as np
 from math import floor
 from luigi.contrib.s3 import S3Target
 from luigi.contrib.spark import SparkSubmitTask, PySparkTask
+from pyspark.sql import SparkSession
 
 class training_task(PySparkTask):
 	bucket = 'dpa-metro-training'
@@ -23,6 +24,8 @@ class training_task(PySparkTask):
 		return cleaned_task(self.year,self.month,self.station)
 
 	def main(self,sc):
+		spark = SparkSession.builder.appName("Pysparkexample").config("spark.some.config.option", "some-value").getOrCreate()
+		
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
@@ -39,9 +42,7 @@ class training_task(PySparkTask):
 
 import sys
 from pyspark import SparkContext
-from pyspark.sql import SparkSession
 
 if __name__ == "__main__":
 	sc = SparkContext()
-	spark = SparkSession.builder.appName("Pysparkexample").config("spark.some.config.option", "some-value").getOrCreate()
 
