@@ -93,7 +93,7 @@ class training_task(PySparkTask):
 
 		cvModel = crossval.fit(trainingData)
 
-		predictions = cvModel.transform(testingData)
+		predictions = cvModel.transform(testingData).toPandas()
 
 		with self.output().open('w') as output_file:
 			predictions.to_csv(output_file)
