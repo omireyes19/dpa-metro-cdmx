@@ -71,11 +71,11 @@ class training_task(PySparkTask):
 			return stats
 
 		def join_range(df, stats):
-    		return df.merge(stats, on = [line, station], how = 'left')
+			return df.merge(stats, on = [line, station], how = 'left')
 
-    	def create_label(df): 
-		    df["label"] = np.where(df[influx] <= df[min_range], 1, np.where(df[influx] <= df[max_range], 2, 3))
-		    return df
+		def create_label(df): 
+			df["label"] = np.where(df[influx] <= df[min_range], 1, np.where(df[influx] <= df[max_range], 2, 3))
+			return df
 
 		final = create_label(join_range(df, calculate_range(df)))
 
