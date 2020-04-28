@@ -14,8 +14,8 @@ from luigi.contrib.s3 import S3Target
 from luigi.contrib.spark import SparkSubmitTask, PySparkTask
 from pyspark.sql import SparkSession
 
-class training_task(PySparkTask):
-	bucket = 'dpa-metro-training'
+class label_task(PySparkTask):
+	bucket = 'dpa-metro-label'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
 	station = luigi.Parameter()
@@ -71,13 +71,16 @@ class training_task(PySparkTask):
 			return stats
 
 		def join_range(df, stats):
-    		return df.merge(stats, on = [line, station], how = 'left')
+			return df.merge(stats, on = [line, station], how = 'left')
 
-    	def create_label(df): 
-		    df["label"] = np.where(df[influx] <= df[min_range], 1, np.where(df[influx] <= df[max_range], 2, 3))
-		    return df
+		def create_label(df): 
+			df["label"] = np.where(df[influx] <= df[min_range], 1, np.where(df[influx] <= df[max_range], 2, 3))
+			return df
 
 		final = create_label(join_range(df, calculate_range(df)))
+
+		with self.output().open('w') as output_file:
+			final.to_csv(output_file)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
