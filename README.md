@@ -202,6 +202,20 @@ Entrenamiento
 
 ![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/flujo.png)
 
+La base de datos del metro se aprovisiona mensualmente, en donde se incorpora la historia del mes terminado. Esta carga de información, dispararía el proceso de entrenamiento, considerando como inicio el nuevo mes, generando tres tablones: el de entrenamiento, el de validación y el de producción.
+
+Para generar estos tablones generamos Pipelines cuyas fases son las siguientes:
+- `OneHotEncoding` para la variable `day_of_week`
+- `StringIndexer` para la variable `label`
+- Generamos el `VectorAssembler` con las variables input
+- `RandomForestClassifier` con hiperpáramentros definidos en un `ParamGrid` con distintas configuraciones.
+- Finalmente un `CrossValidator` de 3 folds 
+
+Al final del entrenamiento, guardamos el mejor modelo en test para usarlo en producción y la salida con las estimaciones para el siguiente mes.
+
+Esta parte quedará bastante interesante cuando lleguemos a Producción. Continuará...
+
+
 ## Linaje de datos.
 ### 1. Extracción: Obtenemos los datos de la API de Datos Abiertos Ciudad de México.
 ### 2. Loading: Subimos los datos a S3 en carpetas nombradas de acuerdo a la fecha con archivos en formato json con procesamiento en EC2. 
