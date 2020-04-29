@@ -198,7 +198,7 @@ Nuestro esquema de datos es:
 Entrenamiento
 =============
 
-##### 7. Generaremos un modelo por cada estación-línea para una ventana de 30 días mensualmente. Para la fase de entrenamiento se decidió construir la siguiente partición de datos Train-Test-Producción
+##### 7. Generaremos un modelo por cada estación-línea para una ventana de 30 días mensualmente. Para la fase de entrenamiento se decidió construir la siguiente partición de datos Entrenamiento-Validación-Producción
 
 ![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/flujo.png)
 
