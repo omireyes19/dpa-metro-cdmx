@@ -58,7 +58,7 @@ class precleaned_task_metadata(luigi.Task):
 		print(ses)
 
 		with self.output_metadata().open('w') as output_file:
-			output_file.write(str(self.today)+","+self.year+","+self.month+","+self.station)
+			output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
 
 	def output_metadata(self):
 		output_path = "s3://{}/precleaned/DATE={}/{}.csv".\
