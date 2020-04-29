@@ -215,6 +215,14 @@ Al final del entrenamiento, guardamos el mejor modelo en test para usarlo en pro
 
 Esta parte quedará bastante interesante cuando lleguemos a Producción. Continuará...
 
+La metadata que estaríamos generando en este paso es la siguiente:
+
+1.  Fecha de ejecución.
+
+2.  Configuración del modelo ganador
+
+3.  Métricas del modelo ganador
+
 
 ## Linaje de datos.
 ### 1. Extracción: Obtenemos los datos de la API de Datos Abiertos Ciudad de México.
