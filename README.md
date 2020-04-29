@@ -15,30 +15,11 @@ una vez automatizado.
 ## Planteamiento del problema
 
 El metro de la ciudad de México es utilizado como medio de transporte
-por millones de personas al día. Es fácil intuir que el dinero que
-percibe el gobierno por la venta de entradas a este toma mucha relevancia
-en el presupuesto mensual. Hay distintas situaciones que provocan el
-cierre definitivo de algunas estaciones: desastres naturales,
-manifestaciones y mantenimiento, por mencionar algunas. Resulta pues
-indispensable una correcta medida de posibles pérdidas diarias en caso
-de que cualquier estación se viera en una situación como la mencionada
-previamente para poder hacer un recorte al presupuesto esperado y tomar
-medidas económicas derivadas de ello.
+por millones de personas al día. Hay días en los que puede estar más afluido de lo normal debido a distintos factores.  Intentaremos capturar algunos de esos factores para predecir de forma diaria si la afluencia en cada estación será baja, normal o alta con el objetivo de que la administración del metro de la CDMX pueda asignar recursos de seguridad, limpieza y operadores de manera eficiente.
 
 ## Implicaciones éticas
 
-El poder tomar la decisión sobre cerrar alguna estación basada en su
-afluencia diaria, tiene una implicación ética fuerte en el sentido 
-de que únicamente se estaría viendo por los intereses monetarios de la
-CDMX, dejando de lado por ejemplo, análisis mucho más robustos como la
-afectación social en términos de movilidad: gastos adicionales para los
-usuarios de esa estación en busca de otras alternativas, cambios en
-el horario o rutina diaria y mayor tránsito; incluso podríamos pensar en
-repercusiones a la salud. Por otro lado, podríamos pensar que si llegara
-a haber cierre de ciertas estaciones por manifestación, las autoridades no
-le darían mayor relevancia dado que se podrían derivar un plan de
-contingencia para recuperar el ingreso que no llegaría al presupuesto
-por este medio.
+No hacer una buena interpretación de los resultados del modelo que resulte en una mala asignación de recursos puede ocasionar accidentes en caso de saturación de una estación, además de que puede subir el índice delictivo como resultado de lo mismo.
 
 ## Obtención de la información
 
@@ -163,7 +144,11 @@ La metadata que estaríamos generando en este paso es la siguiente:
 ## Linaje de datos.
 ### 1. Extracción: Obtenemos los datos de la API de Datos Abiertos Ciudad de México.
 ### 2. Loading: Subimos los datos a S3 en carpetas nombradas de acuerdo a la fecha con archivos en formato json con procesamiento en EC2. 
-### 3. Transformation: Transformamos los datos de json a parquet y damos una estructura hdfs. La estructura de directorios está definida por el particionamiento de las variables *fecha* y *estación*. Además, añadimos como variables el mes y el día junto con variables dicotómicas correspondientes a día de la semana, día festivo y fin de semana.
+### 3. Transformation: Transformamos los datos de json a parquet y damos una estructura hdfs. La estructura de directorios está definida por el particionamiento de las variables *fecha* y *estación*. Además, añadimos como variables el mes, el día del mes y con cuántas líneas cruza la estación, junto con variables dicotómicas correspondientes a día de la semana, día festivo y fin de semana.
+### 4. Creamos la variable objetivo 'label' a partir de los datos históricos por línea y estación y asignamos las etiquetas 1: afluencia baja, 2: afluencia normal y 3: afluencia alta.
+
+## Modelado
+La variable a predecir es la etiqueta de afluencia que creamos 'label', como parte de la preparación de datos, utilizamos one hot encoder para transformar las variables dia de la semana, linea y estacion y utilizamos un Random Forest para hacer clasificación multiclase.
 
 ## Planteamiento del entregable del proyecto
 
