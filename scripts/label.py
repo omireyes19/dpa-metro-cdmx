@@ -21,7 +21,7 @@ class label_task(PySparkTask):
 	month = luigi.IntParameter()
 	station = luigi.Parameter()
 
-	def input(self):
+	def requires(self):
 		return cleaned_task_metadata(self.year,self.month,self.station)
 
 	def main(self,sc):
