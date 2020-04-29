@@ -31,7 +31,7 @@ class training_task(PySparkTask):
 	station = luigi.Parameter()
 
 	def input(self):
-		return label_task(self.year,self.month,self.station)
+		return label_task_metada(self.year,self.month,self.station)
 
 	def main(self,sc):
 		spark = SparkSession.builder.appName("Pysparkexample").config("spark.some.config.option", "some-value").getOrCreate()
