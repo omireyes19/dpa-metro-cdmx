@@ -50,8 +50,8 @@ class cleaned_task(luigi.Task):
 class cleaned_task_metadata(luigi.Task):
 	bucket_metadata = 'dpa-metro-metadata'
 	today = date.today().strftime("%d%m%Y")
-	year = luigi.Parameter()
-	month = luigi.Parameter()
+	year = luigi.IntParameter()
+	month = luigi.IntParameter()
 	station = luigi.Parameter()
 
 	def requires(self):
