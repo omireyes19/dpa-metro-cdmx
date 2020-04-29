@@ -184,16 +184,16 @@ La metadata que estaríamos generando en este paso es la siguiente:
 3.  Número de registros modificados.
 
 Nuestro esquema de datos es:
---year -> int (como partición)
---month -> int (como partición)
---station -> string (como partición)
---date -> string
---line -> string
---influx -> int
---day_of_week -> int
---holiday -> int
---line_crossing -> int
---label -> int
+-- year -> int (como partición)
+-- month -> int (como partición)
+-- station -> string (como partición)
+-- date -> string
+-- line -> string
+-- influx -> int
+-- day_of_week -> int
+-- holiday -> int
+-- line_crossing -> int
+-- label -> int
 
 ## Linaje de datos.
 ### 1. Extracción: Obtenemos los datos de la API de Datos Abiertos Ciudad de México.
