@@ -195,6 +195,13 @@ Nuestro esquema de datos es:
 - line_crossing -> int
 - label -> int
 
+Entrenamiento
+=============
+
+##### 7. Generaremos un modelo por cada estación-línea para una ventana de 30 días mensualmente. Para la fase de entrenamiento se decidió construir la siguiente partición de datos Train-Test-Producción
+
+![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/flujo.png)
+
 ## Linaje de datos.
 ### 1. Extracción: Obtenemos los datos de la API de Datos Abiertos Ciudad de México.
 ### 2. Loading: Subimos los datos a S3 en carpetas nombradas de acuerdo a la fecha con archivos en formato json con procesamiento en EC2. 
