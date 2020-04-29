@@ -5,7 +5,7 @@ import boto3
 import s3fs
 import glob
 import os
-from label_creation import label_task_metadata
+from label_creation import label_task
 from io import StringIO
 import pandas as pd
 import numpy as np
