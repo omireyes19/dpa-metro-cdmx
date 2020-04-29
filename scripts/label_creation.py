@@ -6,7 +6,7 @@ import s3fs
 import glob
 import os
 from datetime import date
-from cleaned_ingest import cleaned_task
+from cleaned_ingest_metadata import cleaned_task_metadata
 from io import StringIO
 import pandas as pd
 import numpy as np
@@ -22,7 +22,7 @@ class label_task(PySparkTask):
 	station = luigi.Parameter()
 
 	def requires(self):
-		return cleaned_task(self.year,self.month,self.station)
+		return cleaned_task_metadata(self.year,self.month,self.station)
 
 	def main(self,sc):
 		line = "line"
@@ -88,30 +88,6 @@ class label_task(PySparkTask):
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		return luigi.contrib.s3.S3Target(path=output_path)
-
-class label_task_metadata(luigi.Task):
-	bucket_metadata = 'dpa-metro-metadata'
-	today = date.today().strftime("%d%m%Y")
-	year = luigi.IntParameter()
-	month = luigi.IntParameter()
-	station = luigi.Parameter()
-
-	def requires(self):
-		return label_task(self.year,self.month,self.station)
-
-	def run(self):
-		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
-		s3_resource = ses.resource('s3')
-
-		obj = s3_resource.Bucket(self.bucket_metadata)
-		print(ses)
-
-		with self.output_metadata().open('w') as output_file:
-			output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
-
-	def output_metadata(self):
-		output_path = "s3://{}/label/DATE={}/{}.csv".format(self.bucket_metadata,str(self.today),str(self.today))
 		return luigi.contrib.s3.S3Target(path=output_path)
 
 import sys
