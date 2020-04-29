@@ -30,7 +30,7 @@ class training_task(PySparkTask):
 	month = luigi.IntParameter()
 	station = luigi.Parameter()
 
-	def input(self):
+	def requires(self):
 		return label_task_metada(self.year,self.month,self.station)
 
 	def main(self,sc):
