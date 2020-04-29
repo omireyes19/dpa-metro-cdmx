@@ -6,7 +6,7 @@ import s3fs
 import glob
 import os
 from datetime import date
-from cleaned_ingest import cleaned_task_metadata
+from cleaned_ingest import cleaned_task
 from io import StringIO
 import pandas as pd
 import numpy as np
@@ -22,7 +22,7 @@ class label_task(PySparkTask):
 	station = luigi.Parameter()
 
 	def requires(self):
-		return cleaned_task_metadata(self.year,self.month,self.station)
+		return cleaned_task(self.year,self.month,self.station)
 
 	def main(self,sc):
 		line = "line"
