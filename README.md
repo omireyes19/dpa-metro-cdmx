@@ -1,8 +1,5 @@
 # dpa-metro-cdmx
 
-hola mundes
-hola munda
-
 ## Descripción del Proyecto
 
 En este proyecto simularemos la puesta en producción de un producto de datos,
