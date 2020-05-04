@@ -25,9 +25,9 @@ class prueba_task(PySparkTask):
     current_credentials = credentials.get_frozen_credentials()
 
     spark = SparkSession.builder\
-    .config('fs.s3a.access.key', current_credentials.access_key)\
-    .config('fs.s3a.secret.key', current_credentials.secret_key)\
-    .config('fs.s3a.session.token', current_credentials.token)\
+    .config('fs.s3.access.key', current_credentials.access_key)\
+    .config('fs.s3.secret.key', current_credentials.secret_key)\
+    .config('fs.s3.session.token', current_credentials.token)\
     .appName("cluster").getOrCreate()
 
     def input(self):
