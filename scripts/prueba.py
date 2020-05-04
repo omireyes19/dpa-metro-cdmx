@@ -29,7 +29,7 @@ class prueba_task(PySparkTask):
 
         p = spark.read.format('csv').options(header='true', inferSchema='true').load(self.input().path)
 
-        p.write.option("header","true").(self.output().path)
+        p.write.option("header","true").csv(self.output().path)
 
 
 if __name__ == "__main__":
