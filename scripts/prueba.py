@@ -1,4 +1,5 @@
 import luigi
+from boto3 import Session
 from luigi.contrib.s3 import S3Target
 from luigi.contrib.spark import SparkSubmitTask, PySparkTask
 
@@ -25,17 +26,6 @@ class prueba_task(PySparkTask):
         return S3Target("s3://dpa-metro-label/year=2018/month=12/station=Chabacano/Chabacano2.csv")
 
     def main(self, sc, *args):
-
-        from boto3 import Session
-        session = Session()
-
-        credentials = session.get_credentials()
-        current_credentials = credentials.get_frozen_credentials()
-
-        sc._jsc.hadoopConfiguration().set("fs.s3.awsAccessKeyId", current_credentials.access_key)
-        sc._jsc.hadoopConfiguration().set("fs.s3.awsSecretAccessKey", current_credentials.secret_key)
-        sc._jsc.hadoopConfiguration().set("fs.s3.session.token", current_credentials.token)
-
         sc.textFile(self.input().path) \
           .flatMap(lambda line: line.split()) \
           .map(lambda word: (word, 1)) \
@@ -44,4 +34,11 @@ class prueba_task(PySparkTask):
 
 
 if __name__ == "__main__":
+    session = Session()
+    credentials = session.get_credentials()
+    current_credentials = credentials.get_frozen_credentials()
+
     sc = SparkContext()
+    sc._jsc.hadoopConfiguration().set("fs.s3.awsAccessKeyId", current_credentials.access_key)
+    sc._jsc.hadoopConfiguration().set("fs.s3.awsSecretAccessKey", current_credentials.secret_key)
+    sc._jsc.hadoopConfiguration().set("fs.s3.session.token", current_credentials.token)
