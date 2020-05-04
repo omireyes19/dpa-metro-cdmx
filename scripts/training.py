@@ -9,6 +9,7 @@ from label_creation_metadata import label_task_metadata
 from io import StringIO
 import pandas as pd
 import numpy as np
+from boto3 import Session
 from datetime import date
 from math import floor
 from luigi.contrib.s3 import S3Target
@@ -34,21 +35,33 @@ class training_task(PySparkTask):
 		return label_task_metadata(self.year,self.month,self.station)
 
 	def main(self,sc):
+		session = Session()
+		credentials = session.get_credentials()
+		current_credentials = credentials.get_frozen_credentials()
+
 		spark = SparkSession.builder.appName("Pysparkexample").config("spark.some.config.option", "some-value").getOrCreate()
 
-		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
-		s3_resource = ses.resource('s3')
+		spark._jsc.hadoopConfiguration().set("fs.s3a.access.key", current_credentials.acces_key)
+		spark._jsc.hadoopConfiguration().set("fs.s3a.secret.key", current_credentials.secret_key)
+		spark._jsc.hadoopConfiguration().set("fs.s3a.session.token", current_credentials.token)
+		spark._jsc.hadoopConfiguration().set("fs.s3a.impl","org.apache.hadoop.fs.s3a.S3AFileSystem")
+		spark._jsc.hadoopConfiguration().set("com.amazonaws.services.s3.enableV4", "true")
+		spark._jsc.hadoopConfiguration().set("fs.s3a.aws.credentials.provider","org.apache.hadoop.fs.s3a.BasicAWSCredentialsProvider")
+		spark._jsc.hadoopConfiguration().set("fs.s3a.endpoint", "us-west-2.amazonaws.com")
 
-		obj = s3_resource.Object("dpa-metro-label","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
-		print(ses)
+		#ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
+		#s3_resource = ses.resource('s3')
 
-		file_content = obj.get()['Body'].read().decode('utf-8')
-		df = pd.read_csv(StringIO(file_content))
+		#obj = s3_resource.Object("dpa-metro-label","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
+		#print(ses)
 
-		df["year"] = self.year
-		df["month"] = self.month
+		#file_content = obj.get()['Body'].read().decode('utf-8')
+		#df = pd.read_csv(StringIO(file_content))
 
-		data = spark.createDataFrame(df)
+		#df["year"] = self.year
+		#df["month"] = self.month
+
+		data = spark.read.csv("s3a://dpa-metro-label/")
 
 		n = data.count()
 
