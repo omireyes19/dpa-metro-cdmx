@@ -37,11 +37,17 @@ class prueba_task(PySparkTask):
         return S3Target("s3://dpa-metro-label/year=2018/month=12/station=Chabacano/Chabacano2.csv")
 
     def main(self, sc, *args):
-        sc.textFile(self.input().path) \
-          .flatMap(lambda line: line.split()) \
-          .map(lambda word: (word, 1)) \
-          .reduceByKey(lambda a, b: a + b) \
-          .saveAsTextFile(self.output().path)
+        #sc.textFile(self.input().path) \
+        #  .flatMap(lambda line: line.split()) \
+        #  .map(lambda word: (word, 1)) \
+        #  .reduceByKey(lambda a, b: a + b) \
+        #  .saveAsTextFile(self.output().path)
+
+        p = spark.read.csv(self.input().path)
+
+        conteo = p.count()
+
+        conteo.write.csv(self.output().path)
 
 
 if __name__ == "__main__":
