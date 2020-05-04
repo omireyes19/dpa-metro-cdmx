@@ -25,8 +25,21 @@ class prueba_task(PySparkTask):
         return S3Target("s3://dpa-metro-label/year=2018/month=12/station=Chabacano/Chabacano2.csv")
 
     def main(self, sc, *args):
+
+        from boto3 import Session
+        session = Session()
+
+        credentials = session.get_credentials()
+        current_credentials = credentials.get_frozen_credentials()
+        sc._jsc.hadoopConfiguration().set("fs.s3n.awsAccessKeyId", current_credentials.acces_key)
+        sc._jsc.hadoopConfiguration().set("fs.s3n.awsSecretAccessKey", current_credentials.secret_key)
+
         sc.textFile(self.input().path) \
           .flatMap(lambda line: line.split()) \
           .map(lambda word: (word, 1)) \
           .reduceByKey(lambda a, b: a + b) \
           .saveAsTextFile(self.output().path)
+
+
+if __name__ == "__main__":
+    sc = SparkContext()
