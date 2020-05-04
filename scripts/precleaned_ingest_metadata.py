@@ -28,10 +28,10 @@ class precleaned_task_metadata(luigi.Task):
 		obj = s3_resource.Bucket(self.bucket_metadata)
 		print(ses)
 
-		with self.output_metadata().open('w') as output_file:
+		with self.output().open('w') as output_file:
 			output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
 
-	def output_metadata(self):
+	def output(self):
 		output_path = "s3://{}/precleaned/DATE={}/{}.csv".\
 		format(self.bucket_metadata,str(self.today),str(self.today))
 		return luigi.contrib.s3.S3Target(path=output_path)
