@@ -29,6 +29,8 @@ class prueba_task(PySparkTask):
 
         p = spark.read.csv(self.input().path)
 
+        p.show()
+
         conteo = p.count()
 
         conteo.write.csv(self.output().path)
