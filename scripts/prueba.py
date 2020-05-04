@@ -27,6 +27,8 @@ class prueba_task(PySparkTask):
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.session.token", current_credentials.token)
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.impl", "org.apache.hadoop.fs.s3.S3FileSystem")
 
+        print("aqui"+str(self.input()))
+
         p = spark.read.format('csv').options(header='true', inferSchema='true').load(self.input().path)
 
         p.write.option("header","true").csv(self.output().path)
