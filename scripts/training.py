@@ -34,7 +34,7 @@ class training_task(PySparkTask):
 		return label_task_metadata(self.year,self.month,self.station)
 
 	def main(self,sc):
-		spark = SparkSession.builder.appName("Pysparkexample").config("spark.some.config.option", "some-value").getOrCreate()
+		spark = SparkSession.builder.appName("Pyspark").getOrCreate()
 
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
