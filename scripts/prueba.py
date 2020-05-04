@@ -20,6 +20,10 @@ class prueba_task(PySparkTask):
     driver_memory = '2g'
     executor_memory = '3g'
 
+    session = Session()
+    credentials = session.get_credentials()
+    current_credentials = credentials.get_frozen_credentials()
+
     spark = SparkSession.builder\
     .config('fs.s3a.access.key', current_credentials.access_key)\
     .config('fs.s3a.secret.key', current_credentials.secret_key)\
