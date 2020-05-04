@@ -9,7 +9,6 @@ from label_creation_metadata import label_task_metadata
 from io import StringIO
 import pandas as pd
 import numpy as np
-from boto3 import Session
 from datetime import date
 from math import floor
 from luigi.contrib.s3 import S3Target
@@ -35,33 +34,21 @@ class training_task(PySparkTask):
 		return label_task_metadata(self.year,self.month,self.station)
 
 	def main(self,sc):
-		session = Session()
-		credentials = session.get_credentials()
-		current_credentials = credentials.get_frozen_credentials()
-
 		spark = SparkSession.builder.appName("Pysparkexample").config("spark.some.config.option", "some-value").getOrCreate()
 
-		spark._jsc.hadoopConfiguration().set("fs.s3a.access.key", current_credentials.acces_key)
-		spark._jsc.hadoopConfiguration().set("fs.s3a.secret.key", current_credentials.secret_key)
-		spark._jsc.hadoopConfiguration().set("fs.s3a.session.token", current_credentials.token)
-		spark._jsc.hadoopConfiguration().set("fs.s3a.impl","org.apache.hadoop.fs.s3a.S3AFileSystem")
-		spark._jsc.hadoopConfiguration().set("com.amazonaws.services.s3.enableV4", "true")
-		spark._jsc.hadoopConfiguration().set("fs.s3a.aws.credentials.provider","org.apache.hadoop.fs.s3a.BasicAWSCredentialsProvider")
-		spark._jsc.hadoopConfiguration().set("fs.s3a.endpoint", "us-west-2.amazonaws.com")
+		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
+		s3_resource = ses.resource('s3')
 
-		#ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
-		#s3_resource = ses.resource('s3')
+		obj = s3_resource.Object("dpa-metro-label","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
+		print(ses)
 
-		#obj = s3_resource.Object("dpa-metro-label","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
-		#print(ses)
+		file_content = obj.get()['Body'].read().decode('utf-8')
+		df = pd.read_csv(StringIO(file_content))
 
-		#file_content = obj.get()['Body'].read().decode('utf-8')
-		#df = pd.read_csv(StringIO(file_content))
+		df["year"] = self.year
+		df["month"] = self.month
 
-		#df["year"] = self.year
-		#df["month"] = self.month
-
-		data = spark.read.csv("s3a://dpa-metro-label/")
+		data = spark.createDataFrame(df)
 
 		n = data.count()
 
@@ -109,10 +96,11 @@ class training_task(PySparkTask):
 
 		predictions = cvModel.transform(testingData).toPandas()
 
-		with self.output()["output"].open('w') as output_file:
-			predictions.to_csv(output_file)
+		with self.output()["predictions"].open('w') as predictions_file:
+			predictions.to_csv(predictions_file)
 
-		#cvModel.bestModel.save(self.output()["model"])
+		with self.output()["model"].open('w') as model_file:
+			cvModel.bestModel.save(model_file)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
@@ -120,7 +108,7 @@ class training_task(PySparkTask):
 
 		model_path = "s3://{}/year={}/month={}/station={}/{}".\
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		return {"output":luigi.contrib.s3.S3Target(path=output_path), "model":luigi.contrib.s3.S3Target(path=model_path)}
+		return {"predictions":luigi.contrib.s3.S3Target(path=output_path), "model":luigi.contrib.s3.S3Target(path=model_path)}
 
 import sys
 from pyspark import SparkContext
