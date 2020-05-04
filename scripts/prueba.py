@@ -33,6 +33,8 @@ class prueba_task(PySparkTask):
 
         conteo = p.count()
 
+        print("aqui"+str(conteo))
+
         conteo.write.csv(self.output().path)
 
 
