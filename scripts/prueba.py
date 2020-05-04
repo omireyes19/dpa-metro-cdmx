@@ -32,9 +32,8 @@ class prueba_task(PySparkTask):
         credentials = session.get_credentials()
         current_credentials = credentials.get_frozen_credentials()
 
-        print("aqui" + str(current_credentials.access_key))
-        sc._jsc.hadoopConfiguration().set("fs.s3n.awsAccessKeyId", current_credentials.access_key)
-        sc._jsc.hadoopConfiguration().set("fs.s3n.awsSecretAccessKey", current_credentials.secret_key)
+        sc._jsc.hadoopConfiguration().set("fs.s3.awsAccessKeyId", current_credentials.access_key)
+        sc._jsc.hadoopConfiguration().set("fs.s3.awsSecretAccessKey", current_credentials.secret_key)
         sc._jsc.hadoopConfiguration().set("fs.s3.session.token", current_credentials.token)
 
         sc.textFile(self.input().path) \
