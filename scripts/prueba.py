@@ -20,10 +20,7 @@ class prueba_task(PySparkTask):
         credentials = session.get_credentials()
         current_credentials = credentials.get_frozen_credentials()
 
-        spark = SparkSession.builder() \
-          .master("local[1]") \
-          .appName("SparkByExamples.com") \
-          .getOrCreate() \
+        spark = SparkSession.builder.master("local[1]").appName("SparkByExamples.com").getOrCreate()
 
         spark.sc._jsc.hadoopConfiguration().set("fs.s3.awsAccessKeyId", current_credentials.access_key)
         spark.sc._jsc.hadoopConfiguration().set("fs.s3.awsSecretAccessKey", current_credentials.secret_key)
