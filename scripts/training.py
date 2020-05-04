@@ -106,7 +106,7 @@ class training_task(PySparkTask):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 
-		model_path = "s3://{}/year={}/month={}/station={}/{}".\
+		model_path = "s3://{}/year={}/month={}/station={}/{}.sav".\
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return {"predictions":luigi.contrib.s3.S3Target(path=output_path), "model":luigi.contrib.s3.S3Target(path=model_path)}
 
