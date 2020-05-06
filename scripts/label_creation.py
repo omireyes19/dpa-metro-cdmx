@@ -35,7 +35,6 @@ class label_task(luigi.Task):
 		max_range = "max_range"
 		prom = "mean"
 		date = "date"
-		spark = SparkSession.builder.appName("Pysparkexample").config("spark.some.config.option", "some-value").getOrCreate()
 
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
