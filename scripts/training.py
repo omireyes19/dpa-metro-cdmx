@@ -49,53 +49,53 @@ class training_task(PySparkTask):
 		df["year"] = self.year
 		df["month"] = self.month
 
-		#data = spark.createDataFrame(df)
+		data = spark.createDataFrame(df)
 
-		#n = data.count()
+		n = data.count()
 
-		#data = data.withColumn('line_crossing', col('line_crossing').cast(IntegerType()))
-		#data = data.withColumnRenamed('label', 'label_prev')
+		data = data.withColumn('line_crossing', col('line_crossing').cast(IntegerType()))
+		data = data.withColumnRenamed('label', 'label_prev')
 
-		#cut_date = floor(n * .7)
+		cut_date = floor(n * .7)
 
-		#categoricalColumns = ['day_of_week', 'line']
-		#stages = []
-		#for categoricalCol in categoricalColumns:
-			#stringIndexer = StringIndexer(inputCol=categoricalCol, outputCol=categoricalCol + "Index")
-			#encoder = OneHotEncoderEstimator(inputCols=[stringIndexer.getOutputCol()], outputCols=[categoricalCol + "classVec"])
-			#stages += [stringIndexer, encoder]
+		categoricalColumns = ['day_of_week', 'line']
+		stages = []
+		for categoricalCol in categoricalColumns:
+			stringIndexer = StringIndexer(inputCol=categoricalCol, outputCol=categoricalCol + "Index")
+			encoder = OneHotEncoderEstimator(inputCols=[stringIndexer.getOutputCol()], outputCols=[categoricalCol + "classVec"])
+			stages += [stringIndexer, encoder]
 
-		#label_stringIdx = StringIndexer(inputCol="label_prev", outputCol="label")
-		#stages += [label_stringIdx]
+		label_stringIdx = StringIndexer(inputCol="label_prev", outputCol="label")
+		stages += [label_stringIdx]
 
-		#numericCols = ["year", "month", "line_crossing"]
-		#assemblerInputs = [c + "classVec" for c in categoricalColumns] + numericCols
-		#assembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
-		#stages += [assembler]
+		numericCols = ["year", "month", "line_crossing"]
+		assemblerInputs = [c + "classVec" for c in categoricalColumns] + numericCols
+		assembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
+		stages += [assembler]
 
-		#partialPipeline = Pipeline().setStages(stages)
-		#pipelineModel = partialPipeline.fit(data)
-		#preppedDataDF = pipelineModel.transform(data)
+		partialPipeline = Pipeline().setStages(stages)
+		pipelineModel = partialPipeline.fit(data)
+		preppedDataDF = pipelineModel.transform(data)
 
-		#id_data = preppedDataDF.withColumn('id', monotonically_increasing_id())
-		#trainingData = id_data.filter(col('id') < cut_date).drop('id')
-		#testingData = id_data.filter(col('id') > cut_date).drop('id')
+		id_data = preppedDataDF.withColumn('id', monotonically_increasing_id())
+		trainingData = id_data.filter(col('id') < cut_date).drop('id')
+		testingData = id_data.filter(col('id') > cut_date).drop('id')
 
-		#rf = RandomForestClassifier(labelCol="label", featuresCol="features")
+		rf = RandomForestClassifier(labelCol="label", featuresCol="features")
 
-		#paramGrid = ParamGridBuilder() \
-		#	.addGrid(rf.numTrees, [int(x) for x in np.linspace(start = 10, stop = 50, num = 1)]) \
-		#	.addGrid(rf.maxDepth, [int(x) for x in np.linspace(start = 5, stop = 25, num = 1)]) \
-		#	.build()
+		paramGrid = ParamGridBuilder() \
+			.addGrid(rf.numTrees, [int(x) for x in np.linspace(start = 10, stop = 50, num = 1)]) \
+			.addGrid(rf.maxDepth, [int(x) for x in np.linspace(start = 5, stop = 25, num = 1)]) \
+			.build()
 
-		#crossval = CrossValidator(estimator=rf,
-		#		   	  estimatorParamMaps=paramGrid,
-        #                 evaluator=MulticlassClassificationEvaluator(),
-        #                  numFolds=3)
+		crossval = CrossValidator(estimator=rf,
+				   	  estimatorParamMaps=paramGrid,
+                         evaluator=MulticlassClassificationEvaluator(),
+                          numFolds=3)
 
-		#cvModel = crossval.fit(trainingData)
+		cvModel = crossval.fit(trainingData)
 
-		#predictions = cvModel.transform(testingData).toPandas()
+		predictions = cvModel.transform(testingData).toPandas()
 
 		with self.output().open('w') as output_file:
 			df.to_csv(output_file)
