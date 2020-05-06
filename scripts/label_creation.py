@@ -13,7 +13,7 @@ import numpy as np
 from math import floor
 from luigi.contrib.s3 import S3Target
 
-class label_task(luigi.task):
+class label_task(luigi.Task):
 	bucket = 'dpa-metro-label'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
@@ -22,7 +22,7 @@ class label_task(luigi.task):
 	def requires(self):
 		return cleaned_task_metadata(self.year,self.month,self.station)
 
-	def main(self,sc):
+	def run(self):
 		line = "line"
 		station = "station"
 		year = "year"
@@ -87,9 +87,6 @@ class label_task(luigi.task):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return luigi.contrib.s3.S3Target(path=output_path)
-
-import sys
-from pyspark import SparkContext
 
 if __name__ == "__main__":
 	luigi.run()
