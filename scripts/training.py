@@ -98,7 +98,7 @@ class training_task(PySparkTask):
 		predictions = cvModel.transform(testingData).toPandas()
 
 		with self.output().open('w') as output_file:
-			df.to_csv(output_file)
+			predictions.to_csv(output_file)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
