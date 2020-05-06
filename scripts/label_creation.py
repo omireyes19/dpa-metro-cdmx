@@ -94,6 +94,5 @@ import sys
 from pyspark import SparkContext
 
 if __name__ == "__main__":
-	sc = SparkContext()
 	luigi.run()
 

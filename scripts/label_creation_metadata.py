@@ -12,8 +12,6 @@ import pandas as pd
 import numpy as np
 from math import floor
 from luigi.contrib.s3 import S3Target
-from luigi.contrib.spark import SparkSubmitTask, PySparkTask
-from pyspark.sql import SparkSession
 
 class label_task_metadata(luigi.Task):
 	bucket_metadata = 'dpa-metro-metadata'
@@ -43,6 +41,5 @@ import sys
 from pyspark import SparkContext
 
 if __name__ == "__main__":
-	sc = SparkContext()
 	luigi.run()
 
