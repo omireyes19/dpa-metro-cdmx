@@ -104,7 +104,7 @@ class training_task(PySparkTask):
 
 		#with self.output()["model"].open('w') as model_file:
 		#cvModel.bestModel.save("s3://{}/year={}/month={}/station={}/{}".format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
-		print("aqui"+str(self.output()["model"]))
+		print("aqui"+str(self.output()["model"].path))
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
