@@ -83,8 +83,8 @@ class training_task(PySparkTask):
 		rf = RandomForestClassifier(labelCol="label", featuresCol="features")
 
 		paramGrid = ParamGridBuilder() \
-			.addGrid(rf.numTrees, [int(x) for x in np.linspace(start = 10, stop = 50, num = 3)]) \
-			.addGrid(rf.maxDepth, [int(x) for x in np.linspace(start = 5, stop = 25, num = 3)]) \
+			.addGrid(rf.numTrees, [int(x) for x in np.linspace(start = 10, stop = 50, num = 1)]) \
+			.addGrid(rf.maxDepth, [int(x) for x in np.linspace(start = 5, stop = 25, num = 1)]) \
 			.build()
 
 		crossval = CrossValidator(estimator=rf,
@@ -97,7 +97,7 @@ class training_task(PySparkTask):
 		predictions = cvModel.transform(testingData).toPandas()
 
 		with self.output().open('w') as output_file:
-			predictions.to_csv(output_file)
+			output_file.write("Prueba")
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
