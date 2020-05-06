@@ -37,9 +37,6 @@ class label_task_metadata(luigi.Task):
 		output_path = "s3://{}/label/DATE={}/{}.csv".format(self.bucket_metadata,str(self.today),str(self.today))
 		return luigi.contrib.s3.S3Target(path=output_path)
 
-import sys
-from pyspark import SparkContext
-
 if __name__ == "__main__":
 	luigi.run()
 
