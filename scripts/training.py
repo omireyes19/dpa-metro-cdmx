@@ -102,7 +102,7 @@ class training_task(PySparkTask):
 		with self.output()["predictions"].open('w') as predictions_file:
 			predictions.to_csv(predictions_file)
 
-		with self.output()["model"].open() as model_file:
+		with self.output()["model"].open('wb') as model_file:
 			cvModel.bestModel.save(model_file)
 		#print("aqui"+str(self.output()["model"].path))
 
@@ -113,7 +113,7 @@ class training_task(PySparkTask):
 		model_path = "s3://{}/year={}/month={}/station={}/{}".\
 		format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return {"predictions":luigi.contrib.s3.S3Target(path=output_path), 
-				"model":luigi.contrib.s3.S3Target(path=model_path,format=format.Nop)}
+				"model":luigi.contrib.s3.S3Target(path=model_path,format=luigi.format.Nop)}
 
 
 if __name__ == "__main__":
