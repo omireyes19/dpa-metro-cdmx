@@ -12,17 +12,6 @@ import numpy as np
 from datetime import date
 from math import floor
 from luigi.contrib.s3 import S3Target
-from luigi.contrib.spark import SparkSubmitTask, PySparkTask
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import col,monotonically_increasing_id
-from pyspark.ml.classification import RandomForestClassifier
-from pyspark.ml.feature import VectorAssembler, StringIndexer
-from pyspark.ml import Pipeline
-from pyspark.ml.tuning import ParamGridBuilder
-from pyspark.ml.tuning import CrossValidator
-from pyspark.ml.evaluation import MulticlassClassificationEvaluator
-from pyspark.ml.feature import OneHotEncoderEstimator
-from pyspark.sql.types import IntegerType
 
 class training_task_metadata(luigi.Task):
 	bucket_metadata = 'dpa-metro-metadata'
