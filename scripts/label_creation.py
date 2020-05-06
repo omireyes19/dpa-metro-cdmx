@@ -12,10 +12,8 @@ import pandas as pd
 import numpy as np
 from math import floor
 from luigi.contrib.s3 import S3Target
-from luigi.contrib.spark import SparkSubmitTask, PySparkTask
-from pyspark.sql import SparkSession
 
-class label_task(PySparkTask):
+class label_task(luigi.task):
 	bucket = 'dpa-metro-label'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
