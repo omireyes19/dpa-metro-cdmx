@@ -97,13 +97,20 @@ class training_task(PySparkTask):
 
 		predictions = cvModel.transform(testingData).toPandas()
 
-		with self.output().open('w') as output_file:
-			predictions.to_csv(output_file)
+		with self.output()["predictions"].open('w') as predictions_file:
+			predictions.to_csv(predictions_file)
+
+		with self.output()["model"].open('w') as model_file:
+			cvModel.bestModel.save(model_file)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		return luigi.contrib.s3.S3Target(path=output_path)
+
+		model_path = "s3://{}/year={}/month={}/station={}/{}".\
+		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
+		return {"predictions":luigi.contrib.s3.S3Target(path=output_path), "model":luigi.contrib.s3.S3Target(path=model_path)}
+
 
 if __name__ == "__main__":
 	luigi.run()
