@@ -102,9 +102,9 @@ class training_task(PySparkTask):
 		with self.output()["predictions"].open('w') as predictions_file:
 			predictions.to_csv(predictions_file)
 
-		#with self.output()["model"].open('w') as model_file:
-		cvModel.bestModel.save(self.output()["model"].path)
-		print("aqui"+str(self.output()["model"].path))
+		with self.output()["model"].open() as model_file:
+			cvModel.bestModel.save(model_file)
+		#print("aqui"+str(self.output()["model"].path))
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
