@@ -22,12 +22,14 @@ class prueba_task(PySparkTask):
 
         spark = SparkSession.builder.master("local[1]").appName("SparkByExamples.com").getOrCreate()
 
-        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.awsAccessKeyId", current_credentials.access_key)
-        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.awsSecretAccessKey", current_credentials.secret_key)
-        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.session.token", current_credentials.token)
-        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.impl", "org.apache.hadoop.fs.s3.S3FileSystem")
- 
-        print("aqui"+str(self.input()))
+        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.access.key", current_credentials.access_key)
+        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.secret.key", current_credentials.secret_key)
+        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.session.token", current_credentials.token)
+
+        #spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.awsAccessKeyId", current_credentials.access_key)
+        #spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.awsSecretAccessKey", current_credentials.secret_key)
+        #spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.session.token", current_credentials.token)
+
 
         p = spark.read.format('csv').options(header='true', inferSchema='true').load(self.input().path)
 
