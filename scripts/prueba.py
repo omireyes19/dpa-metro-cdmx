@@ -29,7 +29,7 @@ class prueba_task(PySparkTask):
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.awsAccessKeyId", current_credentials.access_key)
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.awsSecretAccessKey", current_credentials.secret_key)
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.session.token", current_credentials.token)
-        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3FileSystem")
+        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.impl", "org.apache.hadoop.fs.s3.S3FileSystem")
  
         print("aqui"+str(self.input()))
 
