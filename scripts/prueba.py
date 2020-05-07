@@ -10,10 +10,10 @@ class prueba_task(PySparkTask):
     executor_memory = '3g'
 
     def input(self):
-        return S3Target("s3a://dpa-metro-label/year=2020/month=02/station=Chabacano/Chabacano.csv")
+        return S3Target("s3a://dpa-metro-label/year=2020/month=01/station=Chabacano/Chabacano.csv")
 
     def output(self):
-        return S3Target("s3a://dpa-metro-label/year=2020/month=02/station=Chabacano/Chabacano2.csv")
+        return S3Target("s3a://dpa-metro-label/year=2020/month=01/station=Chabacano/Chabacano2.csv")
 
     def main(self, sc):
         session = Session()
