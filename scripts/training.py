@@ -102,7 +102,7 @@ class training_task(PySparkTask):
 		#s3_resource.Object(self.bucket_model,key).put(Body=pickle_byte_obj)
 
 		with self.output()["model"].open('w') as model_file:
-			pickle_byte_obj.dump(cvModel.bestModel, model_file)
+			pickle_byte_obj.dumps(cvModel.bestModel, model_file)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
