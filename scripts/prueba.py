@@ -15,7 +15,7 @@ class prueba_task(PySparkTask):
     def output(self):
         return S3Target("s3a://dpa-metro-label/year=2020/month=02/station=Chabacano/Chabacano.csv")
 
-    def run(self):
+    def main(self,sc):
         session = Session()
         credentials = session.get_credentials()
         current_credentials = credentials.get_frozen_credentials()
