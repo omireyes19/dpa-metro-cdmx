@@ -1,6 +1,5 @@
 import luigi
 import luigi.contrib.s3
-import boto3
 from training import training_task
 from datetime import date
 

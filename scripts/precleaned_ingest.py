@@ -1,6 +1,7 @@
 import luigi
 import luigi.contrib.s3
 import boto3
+import json
 import pandas as pd
 from raw_ingest_metadata import raw_task_metadata
 
