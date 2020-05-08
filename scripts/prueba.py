@@ -13,7 +13,7 @@ class prueba_task(PySparkTask):
         return S3Target("s3a://dpa-metro-label/year=2020/month=02/station=Chabacano/Chabacano.csv")
 
     def output(self):
-        return S3Target("s3a://dpa-metro-label/year=2020/month=02/station=Chabacano/Chabacano2.csv")
+        return S3Target("s3a://dpa-metro-label/year=2020/month=02/station=Chabacano/Chabacano.csv")
 
     def run(self):
         session = Session()
