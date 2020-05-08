@@ -101,14 +101,14 @@ class training_task(PySparkTask):
 		#format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		#s3_resource.Object(self.bucket_model,key).put(Body=pickle_byte_obj)
 
-		with self.output()["model"].open('wb') as model_file:
+		with self.output()["model"].open('w') as model_file:
 			pickle.dump(cvModel.bestModel, model_file)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 
-		model_path = "s3://{}\year={}\month={}\station={}\{}.pkl".\
+		model_path = "s3://{}/year={}/month={}/station={}/{}.pkl".\
 		format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return {"predictions":luigi.contrib.s3.S3Target(path=output_path)
 				,"model":luigi.contrib.s3.S3Target(path=model_path)
