@@ -29,7 +29,7 @@ class prueba_task(PySparkTask):
 
         #p = spark.read.csv('csv').options(header='true', inferSchema='true').load(self.input().path)
 
-        p = spark.read.csv("s3://dpa-metro-label/year=2020/month=02/station=Chabacano/Chabacano.csv",inferSchema=True,header=True)
+        p = spark.read.csv("s3a://dpa-metro-label/year=2020/month=02/station=Chabacano/Chabacano.csv",inferSchema=True,header=True)
 
         with self.output().open('w') as output_file:
             output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
