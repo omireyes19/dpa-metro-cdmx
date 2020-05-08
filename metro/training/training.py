@@ -1,19 +1,11 @@
-import requests
 import luigi
 import luigi.contrib.s3
 import boto3
-import s3fs
-import glob
-import os
-import joblib
 from label_creation_metadata import label_task_metadata
 from io import StringIO
 import pandas as pd
 import numpy as np
-from datetime import date
 from math import floor
-from luigi import format
-from luigi.contrib.s3 import S3Target
 from luigi.contrib.spark import SparkSubmitTask, PySparkTask
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col,monotonically_increasing_id
@@ -25,7 +17,7 @@ from pyspark.ml.tuning import CrossValidator
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 from pyspark.ml.feature import OneHotEncoderEstimator
 from pyspark.sql.types import IntegerType
-from pyspark import SparkContext
+import pickle
 
 class training_task(PySparkTask):
 	bucket = 'dpa-metro-training'
@@ -103,17 +95,23 @@ class training_task(PySparkTask):
 		with self.output()["predictions"].open('w') as predictions_file:
 			predictions.to_csv(predictions_file)
 
-		#with self.output()["model"].open('w') as model_file:
-		#	joblib.dump(cvModel.bestModel, model_file)
+		#pickle_byte_obj = pickle.dumps(cvModel.bestModel)
+
+		#key = "year={}/month={}/station={}/{}.pkl".\
+		#format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
+		#s3_resource.Object(self.bucket_model,key).put(Body=pickle_byte_obj)
+
+		with self.output()["model"].open('wb') as model_file:
+			pickle.dump(cvModel.bestModel, model_file)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 
-		model_path = "s3://{}/year={}/month={}/station={}/{}".\
+		model_path = "s3://{}/year={}/month={}/station={}/{}.pkl".\
 		format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return {"predictions":luigi.contrib.s3.S3Target(path=output_path)
-				#,"model":luigi.contrib.s3.S3Target(path=model_path,format=luigi.format.Nop)
+				,"model":luigi.contrib.s3.S3Target(path=model_path)
 				}
 
 

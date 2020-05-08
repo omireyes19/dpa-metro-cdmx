@@ -1,12 +1,7 @@
 import requests
 import luigi
 import luigi.contrib.s3
-import boto3
-import s3fs
 import json
-import glob
-import os
-from datetime import date
 from calendar import monthrange
 
 class raw_task(luigi.Task):
@@ -16,12 +11,6 @@ class raw_task(luigi.Task):
 	station = luigi.Parameter()
 
 	def run(self):
-		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
-		s3_resource = ses.resource('s3')
-
-		obj = s3_resource.Bucket(self.bucket)
-		print(ses)
-
 		days_in_month = monthrange(self.year, self.month)[1]
 
 		records = []
