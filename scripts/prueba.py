@@ -29,7 +29,10 @@ class prueba_task(PySparkTask):
 
         p = spark.read.format('csv').options(header='true', inferSchema='true').load(self.input().path)
 
-        p.write.option("header","true").csv(self.output().path)
+        with self.output().open('w') as output_file:
+            output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
+
+        #p.write.option("header","true").csv(self.output().path)
 
 
 if __name__ == "__main__":
