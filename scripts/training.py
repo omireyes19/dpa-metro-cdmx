@@ -97,7 +97,7 @@ class training_task(PySparkTask):
 
 		pickle_byte_obj = pickle.dumps(cvModel.bestModel)
 
-		key = "year={}/month={}/station={}/{}.pkl".\
+		key = "{}{}{}{}.pkl".\
 		format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		s3_resource.Object(self.bucket_model,key).put(Body=pickle_byte_obj)
 
