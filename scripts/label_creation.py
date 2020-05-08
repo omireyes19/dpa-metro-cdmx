@@ -1,17 +1,11 @@
-import requests
 import luigi
 import luigi.contrib.s3
 import boto3
-import s3fs
-import glob
-import os
-from datetime import date
 from cleaned_ingest_metadata import cleaned_task_metadata
 from io import StringIO
 import pandas as pd
 import numpy as np
 from math import floor
-from luigi.contrib.s3 import S3Target
 
 class label_task(luigi.Task):
 	bucket = 'dpa-metro-label'

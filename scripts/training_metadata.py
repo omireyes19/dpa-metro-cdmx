@@ -1,17 +1,8 @@
-import requests
 import luigi
 import luigi.contrib.s3
 import boto3
-import s3fs
-import glob
-import os
 from training import training_task
-from io import StringIO
-import pandas as pd
-import numpy as np
 from datetime import date
-from math import floor
-from luigi.contrib.s3 import S3Target
 
 class training_task_metadata(luigi.Task):
 	bucket_metadata = 'dpa-metro-metadata'

@@ -1,18 +1,11 @@
-import requests
 import luigi
 import luigi.contrib.s3
 import boto3
-import s3fs
-import glob
-import os
 from label_creation_metadata import label_task_metadata
 from io import StringIO
 import pandas as pd
 import numpy as np
-from datetime import date
 from math import floor
-from luigi import format
-from luigi.contrib.s3 import S3Target
 from luigi.contrib.spark import SparkSubmitTask, PySparkTask
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col,monotonically_increasing_id
@@ -24,7 +17,6 @@ from pyspark.ml.tuning import CrossValidator
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 from pyspark.ml.feature import OneHotEncoderEstimator
 from pyspark.sql.types import IntegerType
-from pyspark import SparkContext
 
 class training_task(PySparkTask):
 	bucket = 'dpa-metro-training'
