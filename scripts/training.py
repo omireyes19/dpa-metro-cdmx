@@ -101,7 +101,7 @@ class training_task(PySparkTask):
 		#format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		#s3_resource.Object(self.bucket_model,key).put(Body=pickle_byte_obj)
 
-		with self.output()["model"].open('w') as model_file:
+		with self.output()["model"].open('wb') as model_file:
 			pickle.dump(cvModel.bestModel, model_file)
 
 	def output(self):
