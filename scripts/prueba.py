@@ -25,7 +25,8 @@ class prueba_task(PySparkTask):
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.access.key", current_credentials.access_key)
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.secret.key", current_credentials.secret_key)
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.session.token", current_credentials.token)
-        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.impl", "org.apache.hadoop.fs.s3.S3FileSystem")
+        spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+        #spark.sparkContext._jsc.hadoopConfiguration().set("com.amazonaws.services.s3a.enableV4", "true")
 
         #p = spark.read.csv('csv').options(header='true', inferSchema='true').load(self.input().path)
 
