@@ -27,7 +27,9 @@ class prueba_task(PySparkTask):
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3a.session.token", current_credentials.token)
         spark.sparkContext._jsc.hadoopConfiguration().set("fs.s3.impl", "org.apache.hadoop.fs.s3.S3FileSystem")
 
-        p = spark.read.format('csv').options(header='true', inferSchema='true').load(self.input().path)
+        #p = spark.read.csv('csv').options(header='true', inferSchema='true').load(self.input().path)
+
+        p = spark.read.csv(self.input().path,inferSchema=True,header=True)
 
         with self.output().open('w') as output_file:
             output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
