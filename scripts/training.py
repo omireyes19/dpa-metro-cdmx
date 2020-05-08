@@ -17,6 +17,7 @@ from pyspark.ml.tuning import CrossValidator
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 from pyspark.ml.feature import OneHotEncoderEstimator
 from pyspark.sql.types import IntegerType
+import pickle
 
 class training_task(PySparkTask):
 	bucket = 'dpa-metro-training'
@@ -94,8 +95,10 @@ class training_task(PySparkTask):
 		with self.output()["predictions"].open('w') as predictions_file:
 			predictions.to_csv(predictions_file)
 
-		#with self.output()["model"].open('w') as model_file:
-		#	joblib.dump(cvModel.bestModel, model_file)
+		pickle_byte_obj = pickle.dumps(cvModel.bestModel)
+
+		with self.output()["model"].open('w') as model_file:
+			pickle_byte_obj.dump(cvModel.bestModel, model_file)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
@@ -104,7 +107,7 @@ class training_task(PySparkTask):
 		model_path = "s3://{}/year={}/month={}/station={}/{}".\
 		format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return {"predictions":luigi.contrib.s3.S3Target(path=output_path)
-				#,"model":luigi.contrib.s3.S3Target(path=model_path,format=luigi.format.Nop)
+				,"model":luigi.contrib.s3.S3Target(path=model_path,format=luigi.format.Nop)
 				}
 
 
