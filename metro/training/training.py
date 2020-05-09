@@ -1,22 +1,12 @@
 import luigi
 import luigi.contrib.s3
 import boto3
-from label_creation_metadata import label_task_metadata
+from metro.metadata.label_creation_metadata import label_task_metadata
+from metro.training.predictions import predictions
 from io import StringIO
 import pandas as pd
-import numpy as np
-from math import floor
 from luigi.contrib.spark import SparkSubmitTask, PySparkTask
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col,monotonically_increasing_id
-from pyspark.ml.classification import RandomForestClassifier
-from pyspark.ml.feature import VectorAssembler, StringIndexer
-from pyspark.ml import Pipeline
-from pyspark.ml.tuning import ParamGridBuilder
-from pyspark.ml.tuning import CrossValidator
-from pyspark.ml.evaluation import MulticlassClassificationEvaluator
-from pyspark.ml.feature import OneHotEncoderEstimator
-from pyspark.sql.types import IntegerType
 import pickle
 
 class training_task(PySparkTask):
@@ -44,56 +34,10 @@ class training_task(PySparkTask):
 		df["year"] = self.year
 		df["month"] = self.month
 
-		data = spark.createDataFrame(df)
-
-		n = data.count()
-
-		data = data.withColumn('line_crossing', col('line_crossing').cast(IntegerType()))
-		data = data.withColumnRenamed('label', 'label_prev')
-
-		cut_date = floor(n * .7)
-
-		categoricalColumns = ['day_of_week', 'line']
-		stages = []
-		for categoricalCol in categoricalColumns:
-			stringIndexer = StringIndexer(inputCol=categoricalCol, outputCol=categoricalCol + "Index")
-			encoder = OneHotEncoderEstimator(inputCols=[stringIndexer.getOutputCol()], outputCols=[categoricalCol + "classVec"])
-			stages += [stringIndexer, encoder]
-
-		label_stringIdx = StringIndexer(inputCol="label_prev", outputCol="label")
-		stages += [label_stringIdx]
-
-		numericCols = ["year", "month", "line_crossing"]
-		assemblerInputs = [c + "classVec" for c in categoricalColumns] + numericCols
-		assembler = VectorAssembler(inputCols=assemblerInputs, outputCol="features")
-		stages += [assembler]
-
-		partialPipeline = Pipeline().setStages(stages)
-		pipelineModel = partialPipeline.fit(data)
-		preppedDataDF = pipelineModel.transform(data)
-
-		id_data = preppedDataDF.withColumn('id', monotonically_increasing_id())
-		trainingData = id_data.filter(col('id') < cut_date).drop('id')
-		testingData = id_data.filter(col('id') > cut_date).drop('id')
-
-		rf = RandomForestClassifier(labelCol="label", featuresCol="features")
-
-		paramGrid = ParamGridBuilder() \
-			.addGrid(rf.numTrees, [int(x) for x in np.linspace(start = 10, stop = 50, num = 1)]) \
-			.addGrid(rf.maxDepth, [int(x) for x in np.linspace(start = 5, stop = 25, num = 1)]) \
-			.build()
-
-		crossval = CrossValidator(estimator=rf,
-				   	  estimatorParamMaps=paramGrid,
-                         evaluator=MulticlassClassificationEvaluator(),
-                          numFolds=3)
-
-		cvModel = crossval.fit(trainingData)
-
-		predictions = cvModel.transform(testingData).toPandas()
+		predictions_df = predictions.get_predictions(spark,df)
 
 		with self.output()["predictions"].open('w') as predictions_file:
-			predictions.to_csv(predictions_file)
+			predictions_df.to_csv(predictions_file)
 
 		#pickle_byte_obj = pickle.dumps(cvModel.bestModel)
 
@@ -101,8 +45,8 @@ class training_task(PySparkTask):
 		#format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		#s3_resource.Object(self.bucket_model,key).put(Body=pickle_byte_obj)
 
-		with self.output()["model"].open('wb') as model_file:
-			pickle.dump(cvModel.bestModel, model_file)
+		#with self.output()["model"].open('wb') as model_file:
+		#	pickle.dump(cvModel.bestModel, model_file)
 
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
