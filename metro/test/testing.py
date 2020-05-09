@@ -1,6 +1,6 @@
 import luigi
 import luigi.contrib.s3
-from metro.test.ex1 import TestMarbles
+from ex1 import TestMarbles
 from datetime import date
 
 class testing_task(luigi.Task):
