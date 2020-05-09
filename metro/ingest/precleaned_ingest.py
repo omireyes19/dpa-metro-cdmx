@@ -4,6 +4,7 @@ import boto3
 import json
 import pandas as pd
 from raw_ingest_metadata import raw_task_metadata
+from metro.ingest.to_pandas import to_pandas
 
 class precleaned_task(luigi.Task):
 	bucket = 'dpa-metro-precleaned'
@@ -18,15 +19,16 @@ class precleaned_task(luigi.Task):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		obj = s3_resource.Object("dpa-metro-raw","year={}/month={}/station={}/{}.json".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
+		obj = s3_resource.Object("dpa-metro-raw","year={}/month={}/station={}/{}.json"\
+								 .format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
 		print(ses)
 
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		json_content = json.loads(file_content)
 
+		df = to_pandas.get_dataframe(json_content)
+
 		with self.output().open('w') as output_file:
-			df = pd.DataFrame(json_content)[["fecha","linea","afluencia"]]
-			df.columns = ["date","line","influx"]
 			df.to_csv(output_file)
 
 	def output(self):
