@@ -6,7 +6,7 @@ class TestMarbles(marbles.core.TestCase):
         self.assertEqual('foo'.upper(), 'FOO', note=" the names should be uppercase because bla bla bla")
 
     def test_isupper_w_marbles(self):
-        self.assertTrue('foo'.isupper())
+        self.assertTrue('FOO'.isupper())
         self.assertFalse('Foo'.isupper())
 
     def test_split_w_marbles(self):
