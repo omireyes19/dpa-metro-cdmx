@@ -3,7 +3,7 @@ import luigi.contrib.s3
 from metro.test.ex1 import TestMarbles
 from datetime import date
 
-class testing(luigi.Task):
+class testing_task(luigi.Task):
     bucket_metadata = 'dpa-metro-metadata'
     today = date.today().strftime("%d%m%Y")
     year = luigi.IntParameter()
