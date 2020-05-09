@@ -4,7 +4,7 @@ import boto3
 import json
 import pandas as pd
 from raw_ingest_metadata import raw_task_metadata
-from metro.ingest.to_pandas import to_pandas
+from metro.ingest.translation import translation
 
 class precleaned_task(luigi.Task):
 	bucket = 'dpa-metro-precleaned'
@@ -26,7 +26,7 @@ class precleaned_task(luigi.Task):
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		json_content = json.loads(file_content)
 
-		df = to_pandas.get_dataframe(json_content)
+		df = translation.get_dataframe(json_content)
 
 		with self.output().open('w') as output_file:
 			df.to_csv(output_file)
