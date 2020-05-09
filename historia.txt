@@ -1,0 +1,541 @@
+    1  rm requirements.txt 
+    2  pip freeze > requirements.txt
+    3  nano requirements.txt 
+    4  ls
+    5  cd scripts/
+    6  clear
+    7  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+    8  clear
+    9  git push
+   10  git pull
+   11  clear
+   12  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   13  git pull
+   14  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   15  pip install pyarrow
+   16  pip install fastparquet
+   17  pip freeze > requirements.txt
+   18  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   19  git status
+   20  ls
+   21  rm requirements.txt 
+   22  ls
+   23  git status
+   24  git add ../requirements.txt 
+   25  git commit -m "agregar mas requirements"
+   26  git push
+   27  git status
+   28  git git --reset hard
+   29  git reset --hard
+   30  clear
+   31  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   32  cd dpa-metro-cdmx/
+   33  cd scripts/
+   34  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   35  clear
+   36  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   37  git pull
+   38  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   39  git pull
+   40  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   41  ls
+   42  git pull
+   43  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   44  clear
+   45  rm ../../.aws/credentials
+   46  nano ../../.aws/credentials
+   47  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   48  git pull
+   49  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   50  clear
+   51  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   52  git pull
+   53  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   54  clear
+   55  clear
+   56  spark
+   57  clear
+   58  sudo apt-get update
+   59  sudo apt-get install docker-ce docker-ce-cli containerd.io
+   60  sudo docker run hello-world
+   61  sudo apt-get remove docker docker-engine docker.io
+   62  sudo apt install docker.io
+   63  docker --version
+   64  docker pull jupyter/pyspark-notebook
+   65  clear
+   66  exec "$SHELL"
+   67  exec "$SHELL"
+   68  exec "$SHELL"
+   69  clear
+   70  VERSION=5.0.0
+   71  REPO_URL=paolamedo/aws_rita
+   72  BUILD_DIR=/home/paola/Documents/MCD/ProductoDatos/PROYECTO/dpa_rita
+   73  docker pull $REPO_URL:$VERSION
+   74  ls
+   75  rm .aws/credentials
+   76  nano .aws/credentials
+   77  cd dpa-metro-cdmx/scripts/
+   78  git pull
+   79  PYTHONPATH='.' AWS_PROFILE=omar luigi --module precleaned_ingest precleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   80  git pull
+   81  PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   82  ls
+   83  git pull
+   84  PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   85  git pull
+   86  PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   87  clear
+   88  cd dpa-metro-cdmx/scripts/
+   89  git pull
+   90  PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   91  pip install workalendar
+   92  pip freeze > requirements.txt
+   93  PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   94  pip freeze > requirements.txt
+   95  git pull
+   96  PYTHONPATH='.' AWS_PROFILE=omar luigi --module cleaned_ingest cleaned_task --year 2020 --month 2 --station Chabacano --local-scheduler
+   97  clear
+   98  VERSION=5.0.0
+   99  REPO_URL=paolamedo/aws_rita
+  100  BUILD_DIR=/home/paola/Documents/MCD/ProductoDatos/PROYECTO/dpa_rita
+  101  docker pull $REPO_URL:$VERSION
+  102  sudo systemctl start docker
+  103  sudo systemctl enable docker
+  104  VERSION=5.0.0
+  105  REPO_URL=paolamedo/aws_rita
+  106  BUILD_DIR=/home/paola/Documents/MCD/ProductoDatos/PROYECTO/dpa_rita
+  107  docker pull $REPO_URL:$VERSION
+  108  git status
+  109  gi add requirements.txt 
+  110  git add requirements.txt 
+  111  git commit -m "agregar dependencias en requirements"
+  112  git pushh
+  113  git push
+  114  git pull
+  115  git push
+  116  nano cleaned_ingest.py 
+  117  clear
+  118  sudo systemctl start docker
+  119  sudo run systemctl start docker
+  120  sudo docker pull $REPO_URL:$VERSION
+  121  clear
+  122  ls
+  123  rm requirements.txt 
+  124  cd ..
+  125  pip freeze > requirements.txt
+  126  ls
+  127  cd scripts/
+  128  ls
+  129  git status
+  130  git add .
+  131  git commit -m "pasar el requirements fuera de la carpeta scripts"
+  132  git push
+  133  git status
+  134  git add .
+  135  git status
+  136  cd ..
+  137  git add .
+  138  git status
+  139  git commit -m "pasar el requirements fuera de la carpeta scripts"
+  140  git push
+  141  git status
+  142  clear
+  143  cd scripts/
+  144  nano ingest.sh
+  145  ./ingest.sh
+  146  ls
+  147  rm ingest.sh 
+  148  ls
+  149  exec "$SHELL"
+  150  git pull
+  151  cd dpa-metro-cdmx/scripts/
+  152  git pull
+  153  clear
+  154  ./prueba.sh
+  155  git pull
+  156  ./prueba.sh
+  157  clear
+  158  ls ../../.aws/credentials
+  159  ls ../../.aws
+  160  rm ../../.aws/credentials
+  161  nano ../../.aws/credentials
+  162  git pull
+  163  ls
+  164  ./historic_ingest.sh 
+  165  git pull
+  166  clear
+  167  git pull
+  168  rm ../../.aws/
+  169  rm ../../.aws/credentials
+  170  nano ../../.aws/credentials
+  171  ./historic_ingest.sh 
+  172  git pull
+  173  ./historic_ingest.sh 
+  174  ./historic_ingest.sh > log.txt
+  175  nano log.txt
+  176  ./historic_ingest.sh >> log.txt
+  177  clear
+  178  exec "$SHELL"
+  179  exec "$SHELL"
+  180  clear
+  181  ls .aws/
+  182  rm .aws/credentials
+  183  nano .aws/credentials
+  184  cd dpa-metro-cdmx/scripts/
+  185  ls
+  186  VERSION= omar
+  187  VERSION=omar
+  188  REPO_URL=paolamedo/aws_rita
+  189  BUILD_DIR=/home/paola/Documents/MCD/ProductoDatos/PROYECTO/dpa_rita
+  190  sudo docker pull $REPO_URL:$VERSION
+  191  docker build $(pwd) --force-rm -t $REPO_URL:$VERSION
+  192  sudo docker build $(pwd) --force-rm -t $REPO_URL:$VERSION
+  193  clear
+  194  sudo docker build $(pwd) --force-rm -t $REPO_URL:$VERSION
+  195  cd ..
+  196  sudo docker build $(pwd) --force-rm -t $REPO_URL:$VERSION
+  197  pwd
+  198  REPO_URL=paolamedo/aws_rita
+  199  VERSION=omar
+  200  docker pull $REPO_URL:$VERSION
+  201  sudo docker pull $REPO_URL:$VERSION
+  202  docker run --rm -it
+  203  VERSION=omar
+  204  REPO_URL=paolamedo/aws_rita
+  205  BUILD_DIR=~/Desktop/dpa-metro-cdmx
+  206  docker run --rm -it -v $BUILD_DIR:/home  -v $HOME/.aws:/root/.aws:ro  -v $HOME/.rita:/root/.rita --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  207  sudo docker run --rm -it -v $BUILD_DIR:/home  -v $HOME/.aws:/root/.aws:ro  -v $HOME/.rita:/root/.rita --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  208  ls
+  209  cd dpa-metro-cdmx/
+  210  ls
+  211  cd scripts/
+  212  ls
+  213  ls -lha
+  214  rm log.txt 
+  215  cd ..
+  216  ls -lha
+  217  sudo docker build $(pwd) --force-rm -t $REPO_URL:$VERSION
+  218  clear
+  219  la
+  220  ls
+  221  cd scripts/
+  222  ls
+  223  git pull
+  224  ./historic_ingest.sh 
+  225  ls
+  226  nano historic_ingest.sh 
+  227  sudo docker pull $REPO_URL:$VERSION
+  228  clear
+  229  exec "$SHELL"
+  230  ls
+  231  cd dpa-metro-cdmx/
+  232  cd scripts/
+  233  CommandDescription
+  234  docker image ls
+  235  sudo docker image ls
+  236  sudo docker image rm 11c2f5f04d50
+  237  sudo docker image ls
+  238  clear
+  239  VERSION=omar
+  240  REPO_URL=paolamedo/aws_rita
+  241  BUILD_DIR=~/Desktop/dpa-metro-cdmx
+  242  sudo docker pull $REPO_URL:$VERSION
+  243  docker build $(pwd) --force-rm -t $REPO_URL:$VERSION
+  244  sudo docker build $(pwd) --force-rm -t $REPO_URL:$VERSION
+  245  cd ..
+  246  ls
+  247  cd ..
+  248  ls
+  249  cd dpa-metro-cdmx/scripts/
+  250  docker run --rm -it -v $BUILD_DIR:/home  -v $HOME/.aws:/root/.aws:ro  -v $HOME/.rita:/root/.rita --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  251  sudo docker run --rm -it -v $BUILD_DIR:/home  -v $HOME/.aws:/root/.aws:ro  -v $HOME/.rita:/root/.rita --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  252  clear
+  253  sudo docker run --rm -it -v $BUILD_DIR:/home -v $HOME/.aws:/root/.aws:ro -v $HOME/.rita:/root/.rita --entrypoint "/bin/bash" $REPO_URL:$VERSION
+  254  docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  255  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  256  VERSION=omar
+  257  REPO_URL=paolamedo/aws_rita
+  258  BUILD_DIR=~/Desktop/dpa-metro-cdmx
+  259  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  260  ls
+  261  clear
+  262  ls
+  263  cd Desktop/
+  264  ls
+  265  cd ..
+  266  sudo docker build $(pwd) --force-rm -t $REPO_URL:$VERSION
+  267  VERSION=omar
+  268  REPO_URL=paolamedo/aws_rita
+  269  BUILD_DIR=~/dpa-metro-cdmx
+  270  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  271  clear
+  272  ls
+  273  VERSION=omar
+  274  REPO_URL=paolamedo/aws_rita
+  275  BUILD_DIR=~/Desktop/dpa-metro-cdmx
+  276  cd dpa-metro-cdmx/
+  277  ls
+  278  scripts
+  279  cd ..
+  280  cd Desktop/
+  281  ls
+  282  ls -lha
+  283  cd ..
+  284  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  285  clear
+  286  git status
+  287  cd dpa-metro-cdmx/
+  288  cd scripts/
+  289  clear
+  290  ls
+  291  ./productive_ingest.sh 2019 11
+  292  rm ../../.aws/credentials
+  293  nano ../../.aws/credentials
+  294  ./productive_ingest.sh 2019 11
+  295  ./productive_ingest.sh 2019 10
+  296  cd ../..
+  297  ls
+  298  rm -R Desktop/
+  299  y
+  300  sudo rm -R Desktop/
+  301  ls
+  302  VERSION=omar
+  303  REPO_URL=paolamedo/aws_rita
+  304  BUILD_DIR=~/dpa-metro-cdmx
+  305  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  306  exec "$SHELL"
+  307  exec "$SHELL"
+  308  exec "$SHELL"
+  309  exec "$SHELL"
+  310  clear
+  311  ip add
+  312  luigid
+  313  cd dpa-metro-cdmx/
+  314  luigid
+  315  exec "$SHELL"
+  316  exec "$SHELL"
+  317  clear
+  318  ip add
+  319  VERSION=omar
+  320  REPO_URL=paolamedo/aws_rita
+  321  BUILD_DIR=~/dpa-metro-cdmx
+  322  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash"  $REPO_URL:$VERSION
+  323  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  324  exec "$SHELL"
+  325  exec "$SHELL"
+  326  clear
+  327  clear
+  328  VERSION=omar
+  329  REPO_URL=paolamedo/aws_rita
+  330  BUILD_DIR=~/dpa-metro-cdmx
+  331  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  332  exec "$SHELL"
+  333  exec "$SHELL"
+  334  clear
+  335  clear
+  336  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  337  VERSION=omar
+  338  REPO_URL=paolamedo/aws_rita
+  339  BUILD_DIR=~/dpa-metro-cdmx
+  340  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  341  netstat -lnpt
+  342  exec "$SHELL"
+  343  clear
+  344  VERSION=omar
+  345  REPO_URL=paolamedo/aws_rita
+  346  BUILD_DIR=~/dpa-metro-cdmx
+  347  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  348  exec "$SHELL"
+  349  clear
+  350  ls
+  351  cd dpa-metro-cdmx/scripts/
+  352  ls
+  353  git pull
+  354  clear
+  355  ls -lha
+  356  PYTHONPATH='.' AWS_PROFILE=omar luigi --module training training_task --year 2020 --month 2 --station Chabacano --local-scheduler
+  357  clear
+  358  VERSION=omar
+  359  REPO_URL=paolamedo/aws_rita
+  360  BUILD_DIR=~/dpa-metro-cdmx
+  361  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  362  exec "$SHELL"
+  363  exec "$SHELL"
+  364  exec "$SHELL"
+  365  clear
+  366  VERSION=omar
+  367  REPO_URL=paolamedo/aws_rita
+  368  BUILD_DIR=~/dpa-metro-cdmx
+  369  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  370  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  371  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  372  docker container ls
+  373  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  374  exec "$SHELL"
+  375  clear
+  376  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  377  VERSION=omar
+  378  REPO_URL=paolamedo/aws_rita
+  379  BUILD_DIR=~/dpa-metro-cdmx
+  380  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  381  exec "$SHELL"
+  382  clear
+  383  VERSION=omar
+  384  REPO_URL=paolamedo/aws_rita
+  385  BUILD_DIR=~/dpa-metro-cdmx
+  386  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  387  sudo docker pull $REPO_URL:$VERSION
+  388  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  389  exec "$SHELL"
+  390  clear
+  391  VERSION=omar
+  392  REPO_URL=paolamedo/aws_rita
+  393  BUILD_DIR=~/dpa-metro-cdmx
+  394  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:9080  $REPO_URL:$VERSION 
+  395  apt-get update; apt-get install -y net-tools
+  396  netstat -lnpt
+  397  netstat -lnpt
+  398  VERSION=omar
+  399  REPO_URL=paolamedo/aws_rita
+  400  BUILD_DIR=~/dpa-metro-cdmx
+  401  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  402  exec "$SHELL"
+  403  exec "$SHELL"
+  404  VERSION=omar
+  405  REPO_URL=paolamedo/aws_rita
+  406  BUILD_DIR=~/dpa-metro-cdmx
+  407  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:9080  $REPO_URL:$VERSION 
+  408  VERSION=omar
+  409  REPO_URL=paolamedo/aws_rita
+  410  BUILD_DIR=~/dpa-metro-cdmx
+  411  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:9080  $REPO_URL:$VERSION 
+  412  VERSION=omar
+  413  REPO_URL=paolamedo/aws_rita
+  414  BUILD_DIR=~/dpa-metro-cdmx
+  415  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:9080  $REPO_URL:$VERSION
+  416  exec "$SHELL"
+  417  clear
+  418  VERSION=omar
+  419  REPO_URL=paolamedo/aws_rita
+  420  BUILD_DIR=~/dpa-metro-cdmx
+  421  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION
+  422  exec "$SHELL"
+  423  clear
+  424  VERSION=omar
+  425  REPO_URL=paolamedo/aws_rita
+  426  BUILD_DIR=~/dpa-metro-cdmx
+  427  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  428  exec "$SHELL"
+  429  VERSION=omar
+  430  REPO_URL=paolamedo/aws_rita
+  431  BUILD_DIR=~/dpa-metro-cdmx
+  432  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  433  exec "$SHELL"
+  434  clear
+  435  VERSION=omar
+  436  REPO_URL=paolamedo/aws_rita
+  437  BUILD_DIR=~/dpa-metro-cdmx
+  438  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  439  exec "$SHELL"
+  440  VERSION=omar
+  441  REPO_URL=paolamedo/aws_rita
+  442  BUILD_DIR=~/dpa-metro-cdmx
+  443  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  444  exec "$SHELL"
+  445  clear
+  446  clearc
+  447  clear
+  448  VERSION=omar
+  449  REPO_URL=paolamedo/aws_rita
+  450  BUILD_DIR=~/dpa-metro-cdmx
+  451  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  452  exec "$SHELL"
+  453  exec "$SHELL"
+  454  git pull
+  455  cd dpa-metro-cdmx/
+  456  git pull
+  457  cd scripts/
+  458  YTHONPATH='.' AWS_PROFILE=omar luigi --module training training_task --year 2020 --month 1 --station Chabacano --local-scheduler
+  459  ls
+  460  YTHONPATH='.' AWS_PROFILE=omar luigi --module training training_task --year 2020 --month 1 --station Chabacano --local-scheduler
+  461  PYTHONPATH='.' AWS_PROFILE=omar luigi --module training training_task --year 2020 --month 1 --station Chabacano --local-scheduler
+  462  cd ..
+  463  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  464  VERSION=omar
+  465  REPO_URL=paolamedo/aws_rita
+  466  BUILD_DIR=~/dpa-metro-cdmx
+  467  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  468  VERSION=omar
+  469  REPO_URL=paolamedo/aws_rita
+  470  BUILD_DIR=~/dpa-metro-cdmx
+  471  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  472  exec "$SHELL"
+  473  clear
+  474  VERSION=omar
+  475  REPO_URL=paolamedo/aws_rita
+  476  BUILD_DIR=~/dpa-metro-cdmx
+  477  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  478  sudo -s
+  479  docker ps 
+  480  docker exec -it silly_volhard bash
+  481  docker ps
+  482  docker exec -it silly_volhard bash
+  483  docker ps
+  484  sudo -s
+  485  VERSION=omar
+  486  REPO_URL=paolamedo/aws_rita
+  487  BUILD_DIR=~/dpa-metro-cdmx
+  488  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  489  VERSION=omar
+  490  REPO_URL=paolamedo/aws_rita
+  491  BUILD_DIR=~/dpa-metro-cdmx
+  492  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  493  VERSION=omar
+  494  REPO_URL=paolamedo/aws_rita
+  495  BUILD_DIR=~/dpa-metro-cdmx
+  496  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082  $REPO_URL:$VERSION 
+  497  sudo -s
+  498  sudo docker ps
+  499  sudo docker exec -it great_edison bash
+  500  sudo -s
+  501  VERSION=omar
+  502  REPO_URL=paolamedo/aws_rita
+  503  BUILD_DIR=~/dpa-metro-cdmx
+  504  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082 $REPO_URL:$VERSION 
+  505  df -h .
+  506  du -hs *
+  507  du -hs /* 2>&1 | grep G
+  508  apt-get clean 
+  509  df -h 
+  510  du -hs /var/* | egrep '(G|M)'
+  511  docker ps
+  512  docker images
+  513  du -hs /home 2>&1 | grep G
+  514  du -hs /home/* 2>&1 | egrep  '(G|M)'
+  515  pwd
+  516  ls /home/omar/
+  517  ls /home/ubuntu/
+  518  cd .cache/pip/
+  519  du -hs *
+  520  rm -rf http/
+  521  df -h .
+  522  cd ~omar/
+  523  du -hs .cache/
+  524  cd -
+  525  cd
+  526  pwd
+  527  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082 $REPO_URL:$VERSION 
+  528  cd /home/omar/
+  529  ls
+  530  du -hs dpa-metro-cdmx/ ~ubuntu/dpa-metro-cdmx/
+  531  df -h 
+  532  docker -a
+  533  docker ps -a
+  534  docker images -a
+  535  df -h 
+  536  df -h  .
+  537  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082 $REPO_URL:$VERSION 
+  538  pip list
+  539  sudo docker run --rm -it -v $BUILD_DIR:/home  --entrypoint "/bin/bash" -p 8082:8082 $REPO_URL:$VERSION 
+  540  history | less
+  541  history > historia.txt
