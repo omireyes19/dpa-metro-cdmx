@@ -11,23 +11,9 @@ class testing_task(luigi.Task):
     station = luigi.Parameter()
 
     def run(self):
-        def test_upper_w_marbles():
-            self.assertEqual('foo'.upper(), 'FOO', note=" the names should be uppercase because bla bla bla")
-
-        def test_isupper_w_marbles():
-            self.assertTrue('FOO'.isupper())
-            self.assertFalse('Foo'.isupper())
-
-        def test_split_w_marbles():
-            s = 'hello world'
-            self.assertEqual(s.split(), ['hello', 'world'])
-            # check that s.split fails when the separator is not a string
-            with self.assertRaises(TypeError):
-                s.split(2)
-
-        test_upper_w_marbles()
-        test_isupper_w_marbles()
-        test_split_w_marbles()
+        TestMarbles.test_upper_w_marbles()
+        TestMarbles.test_isupper_w_marbles()
+        TestMarbles.test_split_w_marbles()
 
         with self.output().open('w') as output_file:
             output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
