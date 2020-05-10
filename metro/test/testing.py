@@ -1,5 +1,6 @@
 import luigi
 import luigi.contrib.s3
+import os
 from ex1 import TestMarbles
 from datetime import date
 
@@ -11,10 +12,12 @@ class testing_task(luigi.Task):
     station = luigi.Parameter()
 
     def run(self):
-        cmd = [
-            "python -m marbles ex1"
-        ]
-        subprocess.run(cmd, check=True)
+
+        stream = os.popen('python -m marbles ex1')
+        output = stream.read()
+        print(output)
+        #cmd = ["python -m marbles ex1"]
+        #subprocess.run(cmd, check=True)
 
         with self.output().open('w') as output_file:
             output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
