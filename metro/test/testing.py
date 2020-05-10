@@ -18,13 +18,15 @@ class testing_task(luigi.Task):
         ]
         subprocess.run(cmd, check=True)
 
-    def run(self):
-        TestMarbles.test_upper_w_marbles()
-        TestMarbles.test_isupper_w_marbles()
-        TestMarbles.test_split_w_marbles()
-
         with self.output().open('w') as output_file:
             output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
+
+    #def run(self):
+    #    TestMarbles.test_upper_w_marbles()
+    #    TestMarbles.test_isupper_w_marbles()
+    #    TestMarbles.test_split_w_marbles()
+    #    with self.output().open('w') as output_file:
+    #        output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
 
     def output(self):
         output_path = "s3://{}/unittest_prueba/DATE={}/{}.csv".format(self.bucket_metadata,str(self.today),str(self.today))
