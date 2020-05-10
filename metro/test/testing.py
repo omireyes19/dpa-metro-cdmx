@@ -13,8 +13,6 @@ class testing_task(luigi.Task):
     def run(self):
         cmd = [
             "python -m marbles ex1"
-            #"--do_eval=true",
-            #f"--data_dir={Path(self.data_dir)}",
         ]
         subprocess.run(cmd, check=True)
 
