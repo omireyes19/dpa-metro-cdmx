@@ -11,9 +11,9 @@ class testing_task(luigi.Task):
     station = luigi.Parameter()
 
     def run(self):
-        TestMarbles.test_upper_w_marbles()
-        TestMarbles.test_isupper_w_marbles()
-        TestMarbles.test_split_w_marbles()
+        #TestMarbles.test_upper_w_marbles()
+        #TestMarbles.test_isupper_w_marbles()
+        #TestMarbles.test_split_w_marbles()
 
         with self.output().open('w') as output_file:
             output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
