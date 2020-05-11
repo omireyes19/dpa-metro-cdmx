@@ -1,3 +1,5 @@
+from ParametrizedTestCase import ParametrizedTestCase
+
 class TestOne(ParametrizedTestCase):
     def test_something(self):
         print ('param =', self.param)
