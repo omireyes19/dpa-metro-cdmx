@@ -4,7 +4,7 @@ class ParametrizedTestCase(unittest.TestCase):
     """ TestCase classes that want to be parametrized should
         inherit from this class.
     """
-    def __init__(self, methodName='runTest', year, month, station):
+    def __init__(self, methodName='runTest', year=None, month=None, station=None):
         super(ParametrizedTestCase, self).__init__(methodName)
         self.year = year
         self.month = month
