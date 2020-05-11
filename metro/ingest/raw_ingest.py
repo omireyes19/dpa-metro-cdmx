@@ -1,8 +1,7 @@
-import requests
 import luigi
 import luigi.contrib.s3
 import json
-from calendar import monthrange
+from metro.ingest.call_to_api import call_to_api
 
 class raw_task(luigi.Task):
 	bucket = 'dpa-metro-raw'
@@ -11,18 +10,7 @@ class raw_task(luigi.Task):
 	station = luigi.Parameter()
 
 	def run(self):
-		days_in_month = monthrange(self.year, self.month)[1]
-
-		records = []
-		for day in range(days_in_month):
-			fecha = str(self.year)+"-"+str(self.month).zfill(2)+"-"+str(day+1).zfill(2)
-			api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx&sort=-fecha&facet=fecha&facet=linea&facet=estacion&refine.fecha="+fecha+"&refine.estacion="+self.station
-
-			r = requests.get(url = api_url)
-			data = r.json()
-
-			for obs in data["records"]:
-				records.append(obs["fields"])
+		records = call_to_api.get_information(self.year,self.month,self.station)
 
 		with self.output().open('w') as output_file:
 			json.dump(records, output_file)

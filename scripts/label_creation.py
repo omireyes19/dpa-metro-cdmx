@@ -1,29 +1,22 @@
-import requests
 import luigi
 import luigi.contrib.s3
 import boto3
-import s3fs
-import glob
-import os
-from cleaned_ingest import cleaned_task
+from cleaned_ingest_metadata import cleaned_task_metadata
 from io import StringIO
 import pandas as pd
 import numpy as np
 from math import floor
-from luigi.contrib.s3 import S3Target
-from luigi.contrib.spark import SparkSubmitTask, PySparkTask
-from pyspark.sql import SparkSession
 
-class label_task(PySparkTask):
+class label_task(luigi.Task):
 	bucket = 'dpa-metro-label'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
 	station = luigi.Parameter()
 
-	def input(self):
-		return cleaned_task(self.year,self.month,self.station)
+	def requires(self):
+		return cleaned_task_metadata(self.year,self.month,self.station)
 
-	def main(self,sc):
+	def run(self):
 		line = "line"
 		station = "station"
 		year = "year"
@@ -36,7 +29,6 @@ class label_task(PySparkTask):
 		max_range = "max_range"
 		prom = "mean"
 		date = "date"
-		spark = SparkSession.builder.appName("Pysparkexample").config("spark.some.config.option", "some-value").getOrCreate()
 
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
@@ -89,9 +81,6 @@ class label_task(PySparkTask):
 		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 		return luigi.contrib.s3.S3Target(path=output_path)
 
-import sys
-from pyspark import SparkContext
-
 if __name__ == "__main__":
-	sc = SparkContext()
+	luigi.run()
 

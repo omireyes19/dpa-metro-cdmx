@@ -61,6 +61,9 @@ nosotros por facilidad escogimos `.json`
 
 Partimos del supuesto de que los usuarios están creados en el EC2 según el proceso visto en las [notas de clase](https://github.com/ITAM-DS/data-product-architecture/blob/master/03_infrastructure.md). El `password` de cada usuario es el mismo `user`.
 
+Dependencias
+============
+
 ##### 1. Una vez dentro de la EC2 con el user personal, hacer un clone al [repositorio](https://github.com/omireyes19/dpa-metro-cdmx) del proyecto.
 
 ~~~~bash
@@ -78,6 +81,9 @@ chmod +x create_virtualenv.sh
 ./create_virtualenv.sh
 ~~~~
 
+RAW
+===
+
 ##### 3. Una vez creado el entorno virtual, hacemos la ingesta con un script de bash que carga toda la historia (de enero 2010 hasta febrero 2020).
 
 Es importante mencionar que este script manda a ejecutar dos tasks de luigi concatenados, desde donde hacemos la consulta a la API, para descargar los `.json` de cada año-mes-estación, y a su vez generar la metadata de dicha ingesta. Todo esto bajo el esquema de RAW.
@@ -88,16 +94,14 @@ chmod +x ingesta.sh
 ./ingesta.sh
 ~~~~
 
-La metadata que estaríamos generando en este paso es la siguiente:
 
-RAW {#raw .unnumbered}
-===
+La metadata que estaríamos generando en este paso es la siguiente:
 
 1.  Fecha de ejecución. 
 
 2.  Parámetros de la carga: Año, Mes, Estación
 
-3.  Número de registros.
+3.  Número de registros. Este valor nos servirá como control de calidad, ya que para cada día, el número de registros debe ser `días del mes * número de líneas por las que pasa cada estación`
 
 4.  Usuario de ejecución
 
@@ -109,25 +113,18 @@ RAW {#raw .unnumbered}
 
 8.  Usuario BD
 
-##### 4. Ya con las ingestas en RAW, generaremos un script para pasar los `.json` a formato `.parquet` dándoles una estructura de hdfs con el framework de Spark.
+Nuestro esquema de datos es:
+- Año -> int
+- Estación -> string
+- Fecha -> string
+- Línea -> string
+- Afluencia -> int
 
-La metadata que estaríamos generando en este paso es la siguiente:
-
-Preprocessed {#preprocessed .unnumbered}
+Preprocessed
 ============
 
-1.  Fecha de ejecución.
-
-2.  Parámetros del archivo modificado: Año, Mes, Estación
-
-3.  Número de registros modificados.
-
-4.  Estatus de ejecución.
-
-5.  Especificación del cambio: `.json` a  `.parquet`.
-
-
-##### 5. Finalmente, generamos la base Clean generando una estructura de directorios definida por el particionamiento de las variables *Fecha* y *Estacion*. Además, añadimos variables dicotómicas correspondientes a día de la semana, día festivo y fin de semana. Todo lo anterior, haciendo uso nuevamente de Spark.
+##### 4. Ya con las ingestas en RAW, generaremos un script para pasar los `.json` a formato `.csv` simulando una estructura hdfs, es decir, teniendo
+carpetas como variables pues sabemos que la lectura de spark es óptima cuando se hace a nivel partición. Además, traducimos las variables al inglés.
 
 La metadata que estaríamos generando en este paso es la siguiente:
 
@@ -137,9 +134,95 @@ La metadata que estaríamos generando en este paso es la siguiente:
 
 3.  Número de registros modificados.
 
-4.  Estatus de ejecución.
+4.  Especificación del cambio: `.json` a  `.csv`.
 
-5.  Especificación del cambio: `.json` a  `.parquet`.
+Nuestro esquema de datos es:
+- year -> int (como partición)
+- month -> int (como partición)
+- station -> string (como partición)
+- date -> string
+- line -> string
+- influx -> int
+
+Cleaned
+=======
+
+##### 5. Finalmente, generamos la base Cleaned manteniendo una estructura de directorios definida por el particionamiento de las variables *year*, *month* y *station*. Además, añadimos las variables: día de la semana, día festivo y número de líneas que cruzan en cada estación.
+
+La metadata que estaríamos generando en este paso es la siguiente:
+
+1.  Fecha de ejecución.
+
+2.  Parámetros del archivo modificado: Año, Mes, Estación
+
+3.  Número de registros modificados.
+
+Nuestro esquema de datos es:
+- year -> int (como partición)
+- month -> int (como partición)
+- station -> string (como partición)
+- date -> string
+- line -> string
+- influx -> int
+- day_of_week -> int
+- holiday -> int
+- line_crossing -> int
+
+Construcción de variable objetivo
+=================================
+
+##### 6. Partiendo de la base limpia procedemos a crear nuestra variable objetivo. Para lo cual calculamos un intervalo definido por el rango intercuartil a nivel estación-línea de la afluencia en los últimos 3 meses. Esto debido a que como podemos esperar, cada estación-línea tendrá una afluencia muy distinta, existen estaciones más recurridas que otras. Una vez definido el intervalo, etiquetamos cada uno de los días por la afluencia que tuvo: si está por debajo del rango decimos que la afluencia es Baja, si está dentro del intervalo decimos que es Media y si está por encima lo etiquetaremos como Alta.
+
+Es importante recalcar que cada vez que entrenemos, guardaremos en un dataframe el valor mínimo y máximo de cada estación-línea para poder utilizarlo en la fase productiva. Es decir, cada que llegue una observación nueva es necesario calcular la precisión de nuestro modelo en producción, de tal forma que cruzaremos la afluencia observada con los intervalos para pegarle la etiqueta acorde a lo comentado en el párrafo anterior.
+
+La metadata que estaríamos generando en este paso es la siguiente:
+
+1.  Fecha de ejecución.
+
+2.  Parámetros del archivo modificado: Año, Mes, Estación
+
+3.  Número de registros modificados.
+
+Nuestro esquema de datos es:
+- year -> int (como partición)
+- month -> int (como partición)
+- station -> string (como partición)
+- date -> string
+- line -> string
+- influx -> int
+- day_of_week -> int
+- holiday -> int
+- line_crossing -> int
+- label -> int
+
+Entrenamiento
+=============
+
+##### 7. Generaremos un modelo por cada estación-línea para una ventana de 30 días mensualmente. Para la fase de entrenamiento se decidió construir la siguiente partición de datos Entrenamiento-Validación-Producción
+
+![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/flujo.png)
+
+La base de datos del metro se aprovisiona mensualmente, en donde se incorpora la historia del mes terminado. Esta carga de información, dispararía el proceso de entrenamiento, considerando como inicio el nuevo mes, generando tres tablones: el de entrenamiento, el de validación y el de producción.
+
+Para generar estos tablones generamos Pipelines cuyas fases son las siguientes:
+- `OneHotEncoding` para la variable `day_of_week`
+- `StringIndexer` para la variable `label`
+- Generamos el `VectorAssembler` con las variables input
+- `RandomForestClassifier` con hiperpáramentros definidos en un `ParamGrid` con distintas configuraciones.
+- Finalmente un `CrossValidator` de 3 folds 
+
+Al final del entrenamiento, guardamos el mejor modelo en test para usarlo en producción y la salida con las estimaciones para el siguiente mes.
+
+Esta parte quedará bastante interesante cuando lleguemos a Producción. Continuará...
+
+La metadata que estaríamos generando en este paso es la siguiente:
+
+1.  Fecha de ejecución.
+
+2.  Configuración del modelo ganador
+
+3.  Métricas del modelo ganador
+
 
 ## Linaje de datos.
 ### 1. Extracción: Obtenemos los datos de la API de Datos Abiertos Ciudad de México.
