@@ -5,15 +5,13 @@ import sys
 class TestMarbles(marbles.core.TestCase):
 
     def test_records_not_empty(self):
-
-        records = call_to_api.get_information(year,month,station)
+        print(self.year)
+        records = call_to_api.get_information(self.year,self.month,self.station)
         self.assertNotEqual(len(records), 0, note=" the names should be uppercase because bla bla bla")
 
-if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        sys.exit("ERROR command-line parameter must be supplied for these tests")
-    year = sys.argv[1]
-    month = sys.argv[2]
-    station = sys.argv[3]
-    del sys.argv[1:]
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        TestMarbles.year = sys.argv.pop()
+        TestMarbles.month = sys.argv.pop()
+        TestMarbles.station = sys.argv.pop()
     marbles.core.main()
