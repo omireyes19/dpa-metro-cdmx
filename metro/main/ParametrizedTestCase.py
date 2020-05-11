@@ -4,15 +4,15 @@ class ParametrizedTestCase(unittest.TestCase):
     """ TestCase classes that want to be parametrized should
         inherit from this class.
     """
-    def __init__(self, methodName='runTest', year=None, month=None, station=None, raw_json = None):
+    def __init__(self, methodName='runTest', year=None, month=None, station=None, raw_json=None):
         super(ParametrizedTestCase, self).__init__(methodName)
         self.year = year
         self.month = month
         self.station = station
-        self.raw_jason = raw_json
+        self.raw_json = raw_json
 
     @staticmethod
-    def parametrize(testcase_klass, year=None, month=None, station=None, raw_json = None):
+    def parametrize(testcase_klass, year=None, month=None, station=None, raw_json=None):
         """ Create a suite containing all tests taken from the given
             subclass, passing them the parameter 'param'.
         """
