@@ -1,6 +1,6 @@
 class TestOne(ParametrizedTestCase):
     def test_something(self):
-        print 'param =', self.param
+        print ('param =', self.param)
         self.assertEqual(1, 1)
 
     def test_something_else(self):
