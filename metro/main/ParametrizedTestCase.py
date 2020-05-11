@@ -6,7 +6,9 @@ class ParametrizedTestCase(unittest.TestCase):
     """
     def __init__(self, methodName='runTest', param=None):
         super(ParametrizedTestCase, self).__init__(methodName)
-        self.param = param
+        self.year = year
+        self.month = month
+        self.station = station
 
     @staticmethod
     def parametrize(testcase_klass, param=None):
