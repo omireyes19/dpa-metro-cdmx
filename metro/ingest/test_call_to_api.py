@@ -1,5 +1,5 @@
 import marbles.core
-from ingest.call_to_api import call_to_api
+from call_to_api import call_to_api
 
 class TestMarbles(marbles.core.TestCase):
     def test_records_not_empty(self,year,month,station):
