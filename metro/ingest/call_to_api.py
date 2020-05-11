@@ -17,3 +17,5 @@ class call_to_api:
 
             for obs in data["records"]:
                 records.append(obs["fields"])
+
+            return records
