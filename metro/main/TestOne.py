@@ -2,7 +2,7 @@ from call_to_api import call_to_api
 from ParametrizedTestCase import ParametrizedTestCase
 
 
-class TestMarbles(ParametrizedTestCase):
+class TestOne(ParametrizedTestCase):
 
     def test_records_not_empty(self):
         print(self.year)
