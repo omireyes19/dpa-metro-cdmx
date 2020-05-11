@@ -14,6 +14,6 @@ if __name__ == '__main__':
         sys.exit("ERROR command-line parameter must be supplied for these tests")
     year = sys.argv[1]
     month = sys.argv[2]
-    station = sys.argv[33]
+    station = sys.argv[3]
     del sys.argv[1:]
     marbles.core.main()
