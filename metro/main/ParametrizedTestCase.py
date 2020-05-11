@@ -20,5 +20,5 @@ class ParametrizedTestCase(unittest.TestCase):
         testnames = testloader.getTestCaseNames(testcase_klass)
         suite = unittest.TestSuite()
         for name in testnames:
-            suite.addTest(testcase_klass(name, year = year, month = month, station = station, raw_json = None))
+            suite.addTest(testcase_klass(name, year = year, month = month, station = station, raw_json = raw_json))
         return suite
