@@ -236,3 +236,21 @@ La variable a predecir es la etiqueta de afluencia que creamos 'label', como par
 ## Planteamiento del entregable del proyecto
 
 De manera tentativa se entregará un tablero dinámico en donde el usuario será capaz de ver la predicción de la afluencia diaria por estación del mes siguiente.
+
+## Anexo 1
+### Atributos protegidos
+A continuación se exponen brevemente las consideraciones realizadas acerca de las variables protegidas Línea del metro, así como cercanía a una hospital, también se comentan las métricas que se emplearán para detectar algún tipo de sesgo que pudiera afectar de manera considerable el impacto de nuestros resultados.
+
+#### Línea del metro
+Dentro de cada linea del metro, podría darse el caso de que para alguna linea (o algunas lineas) en particular, la mayoría de sus estaciones sean predichas como de baja afluencia, lo cual podría ocasionar que no se le asignen los recursos adecuados a toda la línea, y esto se vea reflejado en un deterioro de todas las estaciones pertenecientes a tal linea. Para evitar este escenario, se utilizará la variable *line* como variable de atributo protegido. De esta manera nos interesa que cada grupo de la variable "protegida" *line* tenga la misma proporción (o una proporción parecida) de etiquetas positivas predichas (TP), para así asegurar que todas las lineas serán consideradas para el otorgamiento de recursos que mejore su servicio.    
+
+
+#### Cercanía a un hospital
+
+La aparición del Covid 19 tendrá un impacto en los hábitos de movilidad de las personas de la ciudad de México en el corto y mediano plazo. Las medidas de sana distancia promovidas por la Organización Mundial de la Salud (OMS) se mantendrán por un periodo aún no definido. 
+
+Ante la presencia de la pandemia del Covid 19, la medición de la afluencia en el STC metro, se ha convertido en una variable de suma importancia para la toma de decisiones que garanticen la salud de los usuarios. Todos los usuarios del STC metro tienen derecho a utilizar el sistema sin exponerse a un mayor riesgo ante los efectos de la pandemia. Por lo tanto, las autoridades de la ciudad de México buscan enfocar sus medidas sanitarias en las zonas (estaciones) que representan una mayor exposición para los usuarios.
+
+Dicho lo anterior se propone incorporar la variable dicotómica H, la cual toma el valor de 1 cuando algun hospital COVID está en un radio de 1 km a cierta estación del metro, y 0 en cualquier otro caso. De esta manera, nos interesa que las estaciones que están cercanas a un hospital covid y que sean de alta afluencia sean predichas de manera correcta para que así el gobierno de la CDMX pueda destinar los recursos adecuados, pues en caso de que estas estaciones sean predichas erroneamente, no estaríamos destinando recursos a una estación que realmente lo necesita.
+
+Con base en el mapa de exposición y en el árbol de decisión de Aequitas (open source diseñado para medir bias y fairness y desarrollado por DSSG), que tiene el objetivo de facilitar la tomar decisiones operativas se propone utiliar la métrica FNR-Parity, es decir,<img src="https://render.githubusercontent.com/render/math?math=P(\hat{Y}=0|H \cap Y=1)">. 
