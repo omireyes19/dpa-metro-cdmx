@@ -1,7 +1,7 @@
 import luigi
 import luigi.contrib.s3
 import boto3
-from cleaned_ingest_metadata import cleaned_task_metadata
+from label_ingest_unittest import label_unittest_task
 from io import StringIO
 import pandas as pd
 from math import floor
@@ -14,7 +14,7 @@ class label_task(luigi.Task):
 	station = luigi.Parameter()
 
 	def requires(self):
-		return cleaned_task_metadata(self.year,self.month,self.station)
+		return label_unittest_task(self.year,self.month,self.station)
 
 	def run(self):
 		station = "station"
