@@ -9,4 +9,4 @@ class LabelTest(ParametrizedLabelTest):
         distinct_labels = label_df['label'].unique().tolist()
 
         print("aqui"+str(distinct_labels))
-        self.assertListEqual(distinct_labels, range(1, 4))
+        self.assertListEqual(distinct_labels, [1, 2, 3])
