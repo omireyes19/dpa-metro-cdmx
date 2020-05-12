@@ -10,3 +10,4 @@ class date_variables:
         df["day_of_week"] = df["date"].dt.dayofweek
         df['holiday'] = df.date.apply(lambda x: cal.is_working_day(x))
         df['line_crossing']= df.date.map(df.date.value_counts())
+        return df
