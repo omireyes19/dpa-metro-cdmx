@@ -1,7 +1,7 @@
 import luigi
 import luigi.contrib.s3
 import boto3
-from label_ingest_unittest import label_unittest_task
+from label_creation_unittest import label_unittest_task
 from io import StringIO
 import pandas as pd
 from math import floor
