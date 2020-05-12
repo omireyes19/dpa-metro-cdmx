@@ -1,5 +1,6 @@
 import luigi
 import luigi.contrib.s3
+import boto3
 import unittest
 from datetime import date
 from raw_ingest_metadata import raw_task_metadata
@@ -41,7 +42,7 @@ class precleaned_unittest_task(luigi.Task):
                 output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
 
     def output(self):
-        output_path = "s3://{}/raw_unittest/DATE={}/{}.csv". \
+        output_path = "s3://{}/precleaned_unittest/DATE={}/{}.csv". \
             format(self.bucket_metadata,str(self.today),str(self.today))
         return luigi.contrib.s3.S3Target(path=output_path)
 
