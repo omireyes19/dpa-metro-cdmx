@@ -1,7 +1,7 @@
 import luigi
 import luigi.contrib.s3
 import boto3
-from label_creation_metadata import label_task_metadata
+from training_unittest import training_unittest_task
 from train.predictions import predictions
 from io import StringIO
 import pandas as pd
@@ -17,7 +17,7 @@ class training_task(PySparkTask):
 	station = luigi.Parameter()
 
 	def requires(self):
-		return label_task_metadata(self.year,self.month,self.station)
+		return training_unittest_task(self.year,self.month,self.station)
 
 	def run(self):
 		spark = SparkSession.builder.appName("Pyspark").getOrCreate()
