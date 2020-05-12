@@ -9,4 +9,4 @@ class PredictionsTest(ParametrizedPredictionsTest):
         column_names_df = predictions_df.columns.tolist()
 
         print(column_names_df)
-        self.assertTrue(column_names_df.contains('prediction'))
+        self.assertTrue("prediction" in column_names_df)
