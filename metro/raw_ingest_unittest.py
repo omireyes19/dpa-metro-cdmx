@@ -17,7 +17,8 @@ class raw_unittest_task(luigi.Task):
         suite.addTest(ParametrizedCallToAPITest.parametrize(CallToAPITest, year=self.year, month=self.month, station=self.station))
         log = unittest.TextTestRunner(verbosity=2).run(suite)
 
-        print(log)
+        if "FAIL" in log:
+            print("FAIL")
 
         with self.output().open('w') as output_file:
             output_file.write("Exito")
