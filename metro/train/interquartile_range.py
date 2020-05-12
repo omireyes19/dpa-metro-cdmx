@@ -14,7 +14,7 @@ class interquartile_range:
     prom = "mean"
     date = "date"
 
-    def percentile(n):
+    def percentile(self, n):
         def percentile_(x):
             return np.percentile(x, n)
         percentile_.__name__ = 'percentile_%s' % n
