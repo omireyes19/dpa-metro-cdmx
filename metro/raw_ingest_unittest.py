@@ -18,7 +18,7 @@ class raw_unittest_task(luigi.Task):
         log = unittest.TextTestRunner(verbosity=2).run(suite)
 
         if "FAIL" in str(log):
-            print("FAIL")
+            print("AQUI")
 
         with self.output().open('w') as output_file:
             output_file.write("Exito")
