@@ -2,7 +2,7 @@ import luigi
 import luigi.contrib.s3
 import boto3
 from label_creation_metadata import label_task_metadata
-from training.predictions import predictions
+from train.predictions import predictions
 from io import StringIO
 import pandas as pd
 from luigi.contrib.spark import PySparkTask

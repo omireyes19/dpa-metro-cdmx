@@ -5,7 +5,7 @@ from cleaned_ingest_metadata import cleaned_task_metadata
 from io import StringIO
 import pandas as pd
 from math import floor
-from training.interquartile_range import interquartile_range
+from train.interquartile_range import interquartile_range
 
 class label_task(luigi.Task):
 	bucket = 'dpa-metro-label'
