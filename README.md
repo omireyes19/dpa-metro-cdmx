@@ -237,7 +237,7 @@ La variable a predecir es la etiqueta de afluencia que creamos 'label', como par
 
 De manera tentativa se entregará un tablero dinámico en donde el usuario será capaz de ver la predicción de la afluencia diaria por estación del mes siguiente.
 
-## Anexo 1
+## Anexo 1: Bias and Fariness
 ### Atributos protegidos
 A continuación se exponen brevemente las consideraciones realizadas acerca de las variables protegidas Línea del metro, así como cercanía a una hospital, también se comentan las métricas que se emplearán para detectar algún tipo de sesgo que pudiera afectar de manera considerable el impacto de nuestros resultados.
 
@@ -251,6 +251,6 @@ La aparición del Covid 19 tendrá un impacto en los hábitos de movilidad de la
 
 Ante la presencia de la pandemia del Covid 19, la medición de la afluencia en el STC metro, se ha convertido en una variable de suma importancia para la toma de decisiones que garanticen la salud de los usuarios. Todos los usuarios del STC metro tienen derecho a utilizar el sistema sin exponerse a un mayor riesgo ante los efectos de la pandemia. Por lo tanto, las autoridades de la ciudad de México buscan enfocar sus medidas sanitarias en las zonas (estaciones) que representan una mayor exposición para los usuarios.
 
-Dicho lo anterior se propone incorporar la variable dicotómica H, la cual toma el valor de 1 cuando algun hospital COVID está en un radio de 1 km a cierta estación del metro, y 0 en cualquier otro caso. De esta manera, nos interesa que las estaciones que están cercanas a un hospital covid y que sean de alta afluencia sean predichas de manera correcta para que así el gobierno de la CDMX pueda destinar los recursos adecuados, pues en caso de que estas estaciones sean predichas erroneamente, no estaríamos destinando recursos a una estación que realmente lo necesita.
+Dicho lo anterior se propone incorporar la variable dicotómica H, la cual toma el valor de 1 cuando algun hospital COVID está en un radio de 1 km a cierta estación del metro, y 0 en cualquier otro caso. De esta manera, nos interesa que las estaciones que están cercanas a un hospital covid y que sean de alta afluencia sean predichas de manera correcta para que así el gobierno de la CDMX pueda destinar los recursos adecuados, pues en caso de que estas estaciones sean predichas erroneamente, no se estarían destinando recursos a alguna estación que realmente los necesita.
 
-Con base en el mapa de exposición y en el árbol de decisión de Aequitas (open source diseñado para medir bias y fairness y desarrollado por DSSG), que tiene el objetivo de facilitar la tomar decisiones operativas se propone utiliar la métrica FNR-Parity, es decir,<img src="https://render.githubusercontent.com/render/math?math=P(\hat{Y}=0|H \cap Y=1)">. 
+Con base en el mapa de exposición y en el árbol de decisión de Aequitas (open source diseñado para medir bias y fairness y desarrollado por DSSG), que tiene el objetivo de facilitar la tomar decisiones operativas se propone utiliar la métrica FNR-Parity, es decir,<img src="https://render.githubusercontent.com/render/math?math=P(\hat{Y}=0|H, Y=1)">. 
