@@ -2,7 +2,7 @@ import luigi
 import luigi.contrib.s3
 import boto3
 import pandas as pd
-from precleaned_ingest_metadata import precleaned_task_metadata
+from cleaned_ingest_unittest import cleaned_unittest_task
 from ingest.date_variables import date_variables
 from io import StringIO
 
@@ -13,7 +13,7 @@ class cleaned_task(luigi.Task):
 	station = luigi.Parameter()
 
 	def requires(self):
-		return precleaned_task_metadata(self.year,self.month,self.station)
+		return cleaned_unittest_task(self.year,self.month,self.station)
 
 	def run(self):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
