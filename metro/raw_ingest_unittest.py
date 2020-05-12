@@ -17,7 +17,7 @@ class raw_unittest_task(luigi.Task):
         suite.addTest(ParametrizedCallToAPITest.parametrize(CallToAPITest, year=self.year, month=self.month, station=self.station))
         log = unittest.TextTestRunner(verbosity=2).run(suite)
 
-        print("AQUI"+str(log)[-20:])
+        print("AQUI"+str(log))
         if "FAIL" in str(log):
             print("AQUI")
 
