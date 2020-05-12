@@ -5,7 +5,7 @@ from ingest.ParametrizedCallToAPITest import ParametrizedCallToAPITest
 from ingest.CallToAPITest import CallToAPITest
 
 class raw_unittest_task(luigi.Task):
-    bucket = 'dpa-metro-metadata'
+    bucket_metadata = 'dpa-metro-metadata'
     year = luigi.IntParameter()
     month = luigi.IntParameter()
     station = luigi.Parameter()
