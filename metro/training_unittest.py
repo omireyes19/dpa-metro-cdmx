@@ -8,8 +8,10 @@ from datetime import date
 from label_creation_metadata import label_task_metadata
 from train.ParametrizedPredictionsTest import ParametrizedPredictionsTest
 from train.PredictionsTest import PredictionsTest
+from luigi.contrib.spark import PySparkTask
+from pyspark.sql import SparkSession
 
-class training_unittest_task(luigi.Task):
+class training_unittest_task(PySparkTask):
     bucket_metadata = 'dpa-metro-metadata'
     today = date.today().strftime("%d%m%Y")
     year = luigi.IntParameter()
