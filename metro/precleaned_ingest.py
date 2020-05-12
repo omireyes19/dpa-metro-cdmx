@@ -2,7 +2,7 @@ import luigi
 import luigi.contrib.s3
 import boto3
 import json
-from raw_ingest_metadata import raw_task_metadata
+from precleaned_ingest_unittest import precleaned_unittest_task
 from ingest.translation import translation
 
 class precleaned_task(luigi.Task):
@@ -12,7 +12,7 @@ class precleaned_task(luigi.Task):
 	station = luigi.Parameter()
 
 	def requires(self):
-		return raw_task_metadata(self.year,self.month,self.station)
+		return precleaned_unittest_task(self.year,self.month,self.station)
 
 	def run(self):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
