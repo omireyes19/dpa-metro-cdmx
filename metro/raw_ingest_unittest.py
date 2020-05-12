@@ -15,10 +15,11 @@ class raw_unittest_task(luigi.Task):
     def run(self):
         suite = unittest.TestSuite()
         suite.addTest(ParametrizedCallToAPITest.parametrize(CallToAPITest, year=self.year, month=self.month, station=self.station))
-        log = unittest.TextTestRunner(verbosity=2).run(suite)
+        result = unittest.TextTestRunner(verbosity=2).run(suite)
+        test_exit_code = int(not result.wasSuccessful())
 
-        print("hola"+str(log))
-        if "failure=" in str(log):
+        print(test_exit_code)
+        if test_exit_code == 1:
             print("aqui")
 
         with self.output().open('w') as output_file:
