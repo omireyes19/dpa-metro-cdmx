@@ -49,7 +49,7 @@ class label_unittest_task(luigi.Task):
         test_exit_code = int(not result.wasSuccessful())
 
         if test_exit_code == 1:
-            raise Exception('No se han creado las columnas correctamente')
+            raise Exception('La etiqueta tiene valores fuera de rango')
         else:
             with self.output().open('w') as output_file:
                 output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
