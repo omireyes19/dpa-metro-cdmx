@@ -5,6 +5,7 @@ from datetime import date
 from raw_ingest_metadata import raw_task_metadata
 from ingest.ParametrizedTranslationTest import ParametrizedTranslationTest
 from ingest.TranslationTest import TranslationTest
+import json
 
 class precleaned_unittest_task(luigi.Task):
     bucket_metadata = 'dpa-metro-metadata'
@@ -17,8 +18,19 @@ class precleaned_unittest_task(luigi.Task):
         return raw_task_metadata(self.year, self.month, self.station)
 
     def run(self):
+        ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
+        s3_resource = ses.resource('s3')
+
+        obj = s3_resource.Object("dpa-metro-raw","year={}/month={}/station={}/{}.json" \
+                                 .format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
+        print(ses)
+
+        file_content = obj.get()['Body'].read().decode('utf-8')
+        json_content = json.loads(file_content)
+
         suite = unittest.TestSuite()
-        suite.addTest(ParametrizedTranslationTest.parametrize(TranslationTest, year=self.year, month=self.month, station=self.station))
+        suite.addTest(ParametrizedTranslationTest.parametrize(TranslationTest, year=self.year, month=self.month,
+                                                              station=self.station, raw_json=json_content))
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         test_exit_code = int(not result.wasSuccessful())
 
