@@ -25,7 +25,8 @@ class cleaned_task(luigi.Task):
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		df = pd.read_csv(StringIO(file_content))
 
-		df_date = date_variables.add_date_variables(df)
+		date_var = date_variables()
+		df_date = date_var.add_date_variables(df)
 
 		with self.output().open('w') as output_file:
 			df_date.to_csv(output_file)

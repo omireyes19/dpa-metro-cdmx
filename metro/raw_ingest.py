@@ -10,7 +10,9 @@ class raw_task(luigi.Task):
 	station = luigi.Parameter()
 
 	def run(self):
-		records = call_to_api.get_information(self,self.year,self.month,self.station)
+
+		cta = call_to_api()
+		records = cta.get_information(self.year, self.month, self.station)
 
 		with self.output().open('w') as output_file:
 			json.dump(records, output_file)

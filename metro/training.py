@@ -34,7 +34,8 @@ class training_task(PySparkTask):
 		df["year"] = self.year
 		df["month"] = self.month
 
-		predictions_df = predictions.get_predictions(spark,df)
+		predict = predictions()
+		predictions_df = predict.get_predictions(spark, df)
 
 		with self.output()["predictions"].open('w') as predictions_file:
 			predictions_df.to_csv(predictions_file)

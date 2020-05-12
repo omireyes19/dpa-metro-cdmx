@@ -39,7 +39,8 @@ class label_task(luigi.Task):
 		df = df.sort_values(by = date, axis = 0)
 		df_subset = df[0:n]
 
-		final = interquartile_range.create_label(interquartile_range.join_range(df_subset, interquartile_range.calculate_range(df_subset)))
+		intquar_ran = interquartile_range()
+		final = intquar_ran.create_label(interquartile_range.join_range(df_subset, interquartile_range.calculate_range(df_subset)))
 
 		with self.output().open('w') as output_file:
 			final.to_csv(output_file)
