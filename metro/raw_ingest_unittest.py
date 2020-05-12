@@ -20,7 +20,7 @@ class raw_unittest_task(luigi.Task):
 
         raise Exception('Los datos que cargaste tienen longitud cero')
         if test_exit_code == 1:
-            print(Los datos que cargaste tienen longitud cero)
+            print("Los datos que cargaste tienen longitud cero")
 
         with self.output().open('w') as output_file:
             output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
