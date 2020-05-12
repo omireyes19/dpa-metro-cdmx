@@ -18,6 +18,7 @@ class raw_unittest_task(luigi.Task):
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         test_exit_code = int(not result.wasSuccessful())
 
+        raise Exception('Los datos que cargaste tienen longitud cero')
         if test_exit_code == 1:
             print(Los datos que cargaste tienen longitud cero)
 
