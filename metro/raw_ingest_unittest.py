@@ -18,11 +18,11 @@ class raw_unittest_task(luigi.Task):
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         test_exit_code = int(not result.wasSuccessful())
 
-
         if test_exit_code == 0:
-            raise Exception('Los datos que cargaste tienen longitud cero')
-        with self.output().open('w') as output_file:
-            output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
+            #raise Exception('Los datos que cargaste tienen longitud cero')
+        else:
+            with self.output().open('w') as output_file:
+                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
 
     def output(self):
         output_path = "s3://{}/raw_unittest/DATE={}/{}.csv". \
