@@ -5,7 +5,7 @@ class ParametrizedCallToAPITest(unittest.TestCase):
         inherit from this class.
     """
     def __init__(self, methodName='runTest', year=None, month=None, station=None):
-        super(ParametrizedTestCase, self).__init__(methodName)
+        super(ParametrizedCallToAPITest, self).__init__(methodName)
         self.year = year
         self.month = month
         self.station = station
