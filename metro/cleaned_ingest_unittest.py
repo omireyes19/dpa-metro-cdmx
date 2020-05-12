@@ -2,6 +2,7 @@ import luigi
 import luigi.contrib.s3
 import boto3
 import unittest
+import pandas as pd
 from datetime import date
 from precleaned_ingest_metadata import precleaned_task_metadata
 from ingest.ParametrizedDateTest import ParametrizedDateTest
