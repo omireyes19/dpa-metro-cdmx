@@ -14,6 +14,8 @@ class predictions:
     def get_predictions(self,spark,df):
         data = spark.createDataFrame(df)
 
+        data.groupBy("day_of_week").count().show()
+
         n = data.count()
 
         data = data.withColumn('line_crossing', col('line_crossing').cast(IntegerType()))
