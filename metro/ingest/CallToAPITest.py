@@ -1,5 +1,5 @@
-from call_to_api import call_to_api
-from ParametrizedCallToAPITest import ParametrizedCallToAPITest
+from ingest.call_to_api import call_to_api
+from ingest.ParametrizedCallToAPITest import ParametrizedCallToAPITest
 
 class CallToAPITest(ParametrizedCallToAPITest):
     def test_records_not_empty(self):
