@@ -43,7 +43,7 @@ class training_unittest_task(PySparkTask):
         test_exit_code = int(not result.wasSuccessful())
 
         if test_exit_code == 1:
-            raise Exception('La etiqueta tiene valores fuera de rango')
+            raise Exception('La columna de predicciones no se creo correctamente')
         else:
             with self.output().open('w') as output_file:
                 output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
