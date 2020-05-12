@@ -57,7 +57,7 @@ class label_unittest_task(luigi.Task):
 
     def output(self):
         output_path = "s3://{}/label_unittest/DATE={}/{}.csv". \
-            format(self.bucket_metadata,str(self.today),str(self.today))
+            format(self.bucket_metadata,str(self.year)+"-"+str(self.month),str(self.today))
         return luigi.contrib.s3.S3Target(path=output_path)
 
 if __name__ == '__main__':
