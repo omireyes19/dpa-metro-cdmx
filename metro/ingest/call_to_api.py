@@ -5,6 +5,7 @@ class call_to_api:
     def get_information(self, year, month, station):
         days_in_month = monthrange(year, month)[1]
 
+        print("Aqui"+str(days_in_month))
         records = []
         for day in range(days_in_month):
             print(day)
