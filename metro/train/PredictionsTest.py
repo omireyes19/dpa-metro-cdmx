@@ -7,4 +7,6 @@ class PredictionsTest(ParametrizedPredictionsTest):
         pred = predictions()
         predictions_df = pred.get_predictions(self.spark, self.model_data)
         column_names_df = predictions_df.columns
+
+        print(column_names_df)
         self.assertTrue(column_names_df.contains('prediction'))
