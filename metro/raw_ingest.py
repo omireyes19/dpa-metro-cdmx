@@ -2,6 +2,7 @@ import luigi
 import luigi.contrib.s3
 import json
 from ingest.call_to_api import call_to_api
+from raw_ingest_unittest import raw_unittest_task
 
 class raw_task(luigi.Task):
 	bucket = 'dpa-metro-raw'
@@ -9,8 +10,10 @@ class raw_task(luigi.Task):
 	month = luigi.IntParameter()
 	station = luigi.Parameter()
 
-	def run(self):
+	def requires(self):
+		return raw_unittest_task(self.year,self.month,self.station)
 
+	def run(self):
 		cta = call_to_api()
 		records = cta.get_information(self.year, self.month, self.station)
 
