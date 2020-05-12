@@ -19,5 +19,5 @@ class ParametrizedCallToAPITest(unittest.TestCase):
         testnames = testloader.getTestCaseNames(testcase_klass)
         suite = unittest.TestSuite()
         for name in testnames:
-            suite.addTest(testcase_klass(name, year = year, month = month, station = station)
+            suite.addTest(testcase_klass(name, year = year, month = month, station = station))
         return suite
