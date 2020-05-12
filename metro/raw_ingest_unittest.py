@@ -1,11 +1,13 @@
 import luigi
 import luigi.contrib.s3
 import unittest
+from datetime import date
 from ingest.ParametrizedCallToAPITest import ParametrizedCallToAPITest
 from ingest.CallToAPITest import CallToAPITest
 
 class raw_unittest_task(luigi.Task):
     bucket_metadata = 'dpa-metro-metadata'
+    today = date.today().strftime("%d%m%Y")
     year = luigi.IntParameter()
     month = luigi.IntParameter()
     station = luigi.Parameter()
