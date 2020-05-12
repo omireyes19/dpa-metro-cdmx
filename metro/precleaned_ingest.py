@@ -25,7 +25,8 @@ class precleaned_task(luigi.Task):
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		json_content = json.loads(file_content)
 
-		df = translation.get_dataframe(json_content)
+		trans = translation()
+		df = trans.get_dataframe(json_content)
 
 		with self.output().open('w') as output_file:
 			df.to_csv(output_file)
