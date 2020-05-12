@@ -1,13 +1,13 @@
 import luigi
 import luigi.contrib.s3
 import boto3
-from metro.metadata.label_creation_metadata import label_task_metadata
-from metro.training.predictions import predictions
+from label_creation_metadata import label_task_metadata
+from training.predictions import predictions
 from io import StringIO
 import pandas as pd
-from luigi.contrib.spark import SparkSubmitTask, PySparkTask
+from luigi.contrib.spark import PySparkTask
 from pyspark.sql import SparkSession
-import pickle
+
 
 class training_task(PySparkTask):
 	bucket = 'dpa-metro-training'

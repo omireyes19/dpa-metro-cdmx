@@ -2,7 +2,7 @@ import luigi
 import luigi.contrib.s3
 import boto3
 import pandas as pd
-from metro.metadata.precleaned_ingest_metadata import precleaned_task_metadata
+from metro.precleaned_ingest_metadata import precleaned_task_metadata
 from metro.ingest.date_variables import date_variables
 from io import StringIO
 

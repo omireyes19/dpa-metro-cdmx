@@ -1,7 +1,7 @@
 import luigi
 import luigi.contrib.s3
 import json
-from metro.ingest.call_to_api import call_to_api
+from ingest.call_to_api import call_to_api
 
 class raw_task(luigi.Task):
 	bucket = 'dpa-metro-raw'

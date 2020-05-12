@@ -2,9 +2,8 @@ import luigi
 import luigi.contrib.s3
 import boto3
 import json
-import pandas as pd
-from metro.metadata.raw_ingest_metadata import raw_task_metadata
-from metro.ingest.translation import translation
+from raw_ingest_metadata import raw_task_metadata
+from ingest.translation import translation
 
 class precleaned_task(luigi.Task):
 	bucket = 'dpa-metro-precleaned'
