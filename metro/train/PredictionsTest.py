@@ -8,5 +8,4 @@ class PredictionsTest(ParametrizedPredictionsTest):
         predictions_df = pred.get_predictions(self.spark, self.model_data)
         column_names_df = predictions_df.columns.tolist()
 
-        print(column_names_df)
         self.assertTrue("prediction" in column_names_df)
