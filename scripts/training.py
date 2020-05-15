@@ -90,8 +90,11 @@ class training_task(PySparkTask):
 
 		predictions = cvModel.transform(testingData).toPandas()
 
-		with open("modelo.pkl", "w") as output_file:
-			pickle.dump(cvModel.bestModel, output_file)
+
+		cvModel.bestModel.saveAsPickleFile("model.pkl")
+
+		#with open("modelo.pkl", "w") as output_file:
+		#	pickle.dump(cvModel.bestModel, output_file)
 
 
 if __name__ == "__main__":
