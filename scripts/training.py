@@ -92,14 +92,10 @@ class training_task(PySparkTask):
 
 		print("aqui"+str(type(cvModel.bestModel)))
 
-		with self.output().open('w') as model_file:
-			#pickle.dump(cvModel.bestModel, model_file)
-			model_file.write("HOLA")
+		pickle.dump(cvModel.bestModel, self.output().path)
 
 	def output(self):
-		model_path = "s3://{}/year={}/month={}/station={}/{}.pkl".\
-		format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		return luigi.contrib.s3.S3Target(path=model_path)
+		return luigi.LocalTarget("model")
 
 
 if __name__ == "__main__":
