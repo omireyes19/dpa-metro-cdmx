@@ -7,7 +7,7 @@ from io import StringIO
 import pandas as pd
 from luigi.contrib.spark import PySparkTask
 from pyspark.sql import SparkSession
-import pickle
+
 
 class training_task(PySparkTask):
 	bucket = 'dpa-metro-training'
@@ -37,22 +37,27 @@ class training_task(PySparkTask):
 		predict = predictions()
 		predictions_df = predict.get_predictions(spark, df)
 
-		#with self.output()["predictions"].open('w') as predictions_file:
-		#	predictions_df.to_csv(predictions_file)
+		with self.output()["predictions"].open('w') as predictions_file:
+			predictions_df.to_csv(predictions_file)
 
-		with self.output().open('w') as model_file:
-			pickle.dump(cvModel.bestModel, model_file)
+		#pickle_byte_obj = pickle.dumps(cvModel.bestModel)
+
+		#key = "year={}/month={}/station={}/{}.pkl".\
+		#format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
+		#s3_resource.Object(self.bucket_model,key).put(Body=pickle_byte_obj)
+
+		#with self.output()["model"].open('wb') as model_file:
+		#	pickle.dump(cvModel.bestModel, model_file)
 
 	def output(self):
-		#output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
-		#format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
+		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
+		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 
-		model_path = "s3://{}/year={}/month={}/station={}/{}.pkl".\
-		format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		return luigi.contrib.s3.S3Target(path=model_path, format=luigi.format.Nop)
-			#{"predictions":luigi.contrib.s3.S3Target(path=output_path)
-			#	,"model":luigi.contrib.s3.S3Target(path=model_path, format=luigi.format.Nop)
-			#	}
+		#model_path = "s3://{}/year={}/month={}/station={}/{}.pkl".\
+		#format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
+		return {"predictions":luigi.contrib.s3.S3Target(path=output_path)
+				#,"model":luigi.contrib.s3.S3Target(path=model_path)
+				}
 
 
 if __name__ == "__main__":
