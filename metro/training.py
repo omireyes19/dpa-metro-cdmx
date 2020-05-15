@@ -37,21 +37,22 @@ class training_task(PySparkTask):
 		predict = predictions()
 		predictions_df = predict.get_predictions(spark, df)
 
-		with self.output()["predictions"].open('w') as predictions_file:
-			predictions_df.to_csv(predictions_file)
+		#with self.output()["predictions"].open('w') as predictions_file:
+		#	predictions_df.to_csv(predictions_file)
 
-		with self.output()["model"].open('w') as model_file:
+		with self.output().open('w') as model_file:
 			pickle.dump(cvModel.bestModel, model_file)
 
 	def output(self):
-		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
-		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
+		#output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
+		#format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
 
 		model_path = "s3://{}/year={}/month={}/station={}/{}.pkl".\
 		format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		return {"predictions":luigi.contrib.s3.S3Target(path=output_path)
-				,"model":luigi.contrib.s3.S3Target(path=model_path, format=luigi.format.Nop)
-				}
+		return luigi.contrib.s3.S3Target(path=model_path, format=luigi.format.Nop)
+			#{"predictions":luigi.contrib.s3.S3Target(path=output_path)
+			#	,"model":luigi.contrib.s3.S3Target(path=model_path, format=luigi.format.Nop)
+			#	}
 
 
 if __name__ == "__main__":
