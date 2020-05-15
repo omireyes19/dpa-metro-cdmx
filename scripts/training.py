@@ -83,36 +83,20 @@ class training_task(PySparkTask):
 			.addGrid(rf.maxDepth, [int(x) for x in np.linspace(start = 5, stop = 25, num = 1)]) \
 			.build()
 
-		crossval = CrossValidator(estimator=rf,
-				   	  estimatorParamMaps=paramGrid,
-                         evaluator=MulticlassClassificationEvaluator(),
-                          numFolds=3)
+		crossval = CrossValidator(estimator=rf, estimatorParamMaps=paramGrid,
+								  evaluator=MulticlassClassificationEvaluator(), numFolds=3)
 
 		cvModel = crossval.fit(trainingData)
 
 		predictions = cvModel.transform(testingData).toPandas()
 
-		with self.output()["predictions"].open('w') as predictions_file:
-			predictions.to_csv(predictions_file)
-
-		#pickle_byte_obj = pickle.dumps(cvModel.bestModel)
-
-		#key = "year={}/month={}/station={}/{}.pkl".\
-		#format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		#s3_resource.Object(self.bucket_model,key).put(Body=pickle_byte_obj)
-
-		with self.output()["model"].open('wb') as model_file:
+		with self.output().open('wb') as model_file:
 			pickle.dump(cvModel.bestModel, model_file)
 
 	def output(self):
-		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
-		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-
 		model_path = "s3://{}/year={}/month={}/station={}/{}.pkl".\
 		format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		return {"predictions":luigi.contrib.s3.S3Target(path=output_path)
-				,"model":luigi.contrib.s3.S3Target(path=model_path)
-				}
+		return luigi.contrib.s3.S3Target(path=model_path, format = luigi.format.Nop)
 
 
 if __name__ == "__main__":
