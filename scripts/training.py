@@ -90,8 +90,6 @@ class training_task(PySparkTask):
 
 		predictions = cvModel.transform(testingData).toPandas()
 
-		print("aqui"+str(type(cvModel.bestModel)))
-
 		pickle.dump(cvModel.bestModel, "modelo.pkl")
 
 
