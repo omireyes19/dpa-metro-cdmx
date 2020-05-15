@@ -92,10 +92,7 @@ class training_task(PySparkTask):
 
 		print("aqui"+str(type(cvModel.bestModel)))
 
-		pickle.dump(cvModel.bestModel, self.output().path)
-
-	def output(self):
-		return luigi.LocalTarget("model")
+		pickle.dump(cvModel.bestModel, "modelo.pkl")
 
 
 if __name__ == "__main__":
