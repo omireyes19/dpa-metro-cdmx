@@ -90,8 +90,10 @@ class training_task(PySparkTask):
 
 		predictions = cvModel.transform(testingData).toPandas()
 
+		print("aqui"+str(type(cvModel.bestModel)))
+
 		with self.output().open('w') as model_file:
-			model_file.write("Hola")
+			pickle.dump(cvModel.bestModel, model_file)
 
 	def output(self):
 		model_path = "s3://{}/year={}/month={}/station={}/{}.pkl".\
