@@ -44,8 +44,11 @@ class label_unittest_task(luigi.Task):
 
             df.append(aux, ignore_index=True)
 
+        intquar_ran = interquartile_range()
+        final = intquar_ran.create_label(intquar_ran.join_range(df, intquar_ran.calculate_range(df)))
+
         suite = unittest.TestSuite()
-        suite.addTest(ParametrizedLabelTest.parametrize(LabelTest, year=self.year, month=self.month, cleaned_data=df))
+        suite.addTest(ParametrizedLabelTest.parametrize(LabelTest, year=self.year, month=self.month, cleaned_data=final))
 
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         test_exit_code = int(not result.wasSuccessful())
