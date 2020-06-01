@@ -11,39 +11,43 @@ class label_task(luigi.Task):
 	bucket = 'dpa-metro-label'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
-	station = luigi.Parameter()
 
 	def requires(self):
-		return label_unittest_task(self.year,self.month,self.station)
+		return label_unittest_task(self.year,self.month)
 
 	def run(self):
-		date = "date"
+		def months_of_history(year, month):
+			day = monthrange(year, month)[1]
+			d1 = datetime(year, month, day)
+			return (d1.year - 2018) * 12 + d1.month
+
+		cut_date = floor(months_of_history(self.year, self.month) * .7)
 
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		obj = s3_resource.Object("dpa-metro-cleaned","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
-		print(ses)
+		df = pd.DataFrame()
+		for i in range(cut_date):
+			reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
+			print(reference_date.year)
+			print(reference_date.month)
 
-		file_content = obj.get()['Body'].read().decode('utf-8')
-		df = pd.read_csv(StringIO(file_content))
+			obj = s3_resource.Object("dpa-metro-cleaned", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
 
-		df['month_year'] = pd.DatetimeIndex(df[date]).to_period('M')
-		dif_months = df['month_year'].unique()
-		num_dif_months = len(dif_months)
-		n = floor(num_dif_months * 0.7)
-		filter_month = dif_months[[n]]
-		df = df[df['month_year']<=filter_month[0]].drop('month_year', axis = 1)
+			file_content = obj.get()['Body'].read().decode('utf-8')
+			aux = pd.read_csv(StringIO(file_content))
+
+			df.append(aux, ignore_index=True)
 
 		intquar_ran = interquartile_range()
-		final = intquar_ran.create_label(intquar_ran.join_range(df_subset, intquar_ran.calculate_range(df_subset)))
+		final = intquar_ran.create_label(intquar_ran.join_range(df, intquar_ran.calculate_range(df)))
 
 		with self.output().open('w') as output_file:
 			final.to_csv(output_file)
 
 	def output(self):
-		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
-		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
+		output_path = "s3://{}/year={}/month={}/{}.csv".\
+		format(self.bucket,str(self.year),str(self.month).zfill(2),str(self.year)+str(self.month).zfill(2))
 		return luigi.contrib.s3.S3Target(path=output_path)
 
 if __name__ == "__main__":

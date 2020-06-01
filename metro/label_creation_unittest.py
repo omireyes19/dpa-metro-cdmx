@@ -9,43 +9,46 @@ from math import floor
 from cleaned_ingest_metadata import cleaned_task_metadata
 from train.ParametrizedLabelTest import ParametrizedLabelTest
 from train.LabelTest import LabelTest
+from datetime import datetime
+from dateutil.relativedelta import *
+from calendar import monthrange
 
 class label_unittest_task(luigi.Task):
     bucket_metadata = 'dpa-metro-metadata'
     today = date.today().strftime("%d%m%Y")
     year = luigi.IntParameter()
     month = luigi.IntParameter()
-    station = luigi.Parameter()
 
     def requires(self):
-        return cleaned_task_metadata(self.year,self.month,self.station)
+        return cleaned_task_metadata(self.year,self.month)
 
     def run(self):
-        station = "station"
-        year = "year"
-        month = "month"
-        date = "date"
+        def months_of_history(year, month):
+            day = monthrange(year, month)[1]
+            d1 = datetime(year, month, day)
+            return (d1.year - 2018) * 12 + d1.month
+
+        cut_date = floor(months_of_history(self.year, self.month) * .7)
 
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
         s3_resource = ses.resource('s3')
 
-        obj = s3_resource.Object("dpa-metro-cleaned","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
-        print(ses)
+        df = pd.DataFrame()
+        for i in range(cut_date):
+            reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
+            print(reference_date.year)
+            print(reference_date.month)
 
-        file_content = obj.get()['Body'].read().decode('utf-8')
-        df = pd.read_csv(StringIO(file_content))
+            obj = s3_resource.Object("dpa-metro-cleaned", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
 
-        df[year] = self.year
-        df[month] = self.month
-        df[station] = self.station
+            file_content = obj.get()['Body'].read().decode('utf-8')
+            aux = pd.read_csv(StringIO(file_content))
 
-        n = floor(df.shape[0] * .7)
-        df = df.sort_values(by = date, axis = 0)
-        df_subset = df[0:n]
+            df.append(aux, ignore_index=True)
 
         suite = unittest.TestSuite()
-        suite.addTest(ParametrizedLabelTest.parametrize(LabelTest, year=self.year, month=self.month,
-                                                       station=self.station, cleaned_data=df_subset))
+        suite.addTest(ParametrizedLabelTest.parametrize(LabelTest, year=self.year, month=self.month, cleaned_data=df))
+
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         test_exit_code = int(not result.wasSuccessful())
 
@@ -53,7 +56,7 @@ class label_unittest_task(luigi.Task):
             raise Exception('La etiqueta tiene valores fuera de rango')
         else:
             with self.output().open('w') as output_file:
-                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
+                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month))
 
     def output(self):
         output_path = "s3://{}/label_unittest/DATE={}/{}.csv". \
