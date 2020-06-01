@@ -14,24 +14,22 @@ class cleaned_unittest_task(luigi.Task):
     today = date.today().strftime("%d%m%Y")
     year = luigi.IntParameter()
     month = luigi.IntParameter()
-    station = luigi.Parameter()
 
     def requires(self):
-        return precleaned_task_metadata(self.year,self.month,self.station)
+        return precleaned_task_metadata(self.year,self.month)
 
     def run(self):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
         s3_resource = ses.resource('s3')
 
-        obj = s3_resource.Object("dpa-metro-precleaned","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
+        obj = s3_resource.Object("dpa-metro-precleaned","year={}/month={}/{}.csv".format(str(self.year),str(self.month).zfill(2),str(self.year)+str(self.month).zfill(2)))
         print(ses)
 
         file_content = obj.get()['Body'].read().decode('utf-8')
         df = pd.read_csv(StringIO(file_content))
 
         suite = unittest.TestSuite()
-        suite.addTest(ParametrizedDateTest.parametrize(DateTest, year=self.year, month=self.month,
-                                                       station=self.station, csv_data=df))
+        suite.addTest(ParametrizedDateTest.parametrize(DateTest, year=self.year, month=self.month, csv_data=df))
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         test_exit_code = int(not result.wasSuccessful())
 
@@ -39,7 +37,7 @@ class cleaned_unittest_task(luigi.Task):
             raise Exception('No se han creado las columnas correctamente')
         else:
             with self.output().open('w') as output_file:
-                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
+                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month))
 
     def output(self):
         output_path = "s3://{}/cleaned_unittest/DATE={}/{}.csv". \
