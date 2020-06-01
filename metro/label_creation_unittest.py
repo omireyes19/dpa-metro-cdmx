@@ -43,6 +43,8 @@ class label_unittest_task(luigi.Task):
             file_content = obj.get()['Body'].read().decode('utf-8')
             aux = pd.read_csv(StringIO(file_content))
 
+            print(len(aux))
+
             df.append(aux, ignore_index=True)
 
             print(len(df))
