@@ -45,6 +45,8 @@ class label_unittest_task(luigi.Task):
 
             df.append(aux, ignore_index=True)
 
+            print(len(df))
+
         print("aqui")
         print(df.head(5))
 
