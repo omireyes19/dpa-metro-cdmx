@@ -12,6 +12,7 @@ from train.LabelTest import LabelTest
 from datetime import datetime
 from dateutil.relativedelta import *
 from calendar import monthrange
+from train.interquartile_range import interquartile_range
 
 class label_unittest_task(luigi.Task):
     bucket_metadata = 'dpa-metro-metadata'
