@@ -8,14 +8,13 @@ class precleaned_task_metadata(luigi.Task):
 	today = date.today().strftime("%d%m%Y")
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
-	station = luigi.Parameter()
 
 	def requires(self):
-		return precleaned_task(self.year,self.month,self.station)
+		return precleaned_task(self.year,self.month)
 
 	def run(self):
 		with self.output().open('w') as output_file:
-			output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
+			output_file.write(str(self.today)+","+str(self.year)+","+str(self.month))
 
 	def output(self):
 		output_path = "s3://{}/precleaned/DATE={}/{}.csv".\

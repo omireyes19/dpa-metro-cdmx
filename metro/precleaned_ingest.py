@@ -9,17 +9,15 @@ class precleaned_task(luigi.Task):
 	bucket = 'dpa-metro-precleaned'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
-	station = luigi.Parameter()
 
 	def requires(self):
-		return precleaned_unittest_task(self.year,self.month,self.station)
+		return precleaned_unittest_task(self.year,self.month)
 
 	def run(self):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		obj = s3_resource.Object("dpa-metro-raw","year={}/month={}/station={}/{}.json"\
-								 .format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
+		obj = s3_resource.Object("dpa-metro-raw","year={}/month={}/{}.json".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
 		print(ses)
 
 		file_content = obj.get()['Body'].read().decode('utf-8')
