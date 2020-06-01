@@ -29,8 +29,7 @@ class precleaned_unittest_task(luigi.Task):
         json_content = json.loads(file_content)
 
         suite = unittest.TestSuite()
-        suite.addTest(ParametrizedTranslationTest.parametrize(TranslationTest, year=self.year, month=self.month,
-                                                              station=self.station, raw_json=json_content))
+        suite.addTest(ParametrizedTranslationTest.parametrize(TranslationTest, year=self.year, month=self.month, raw_json=json_content))
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         test_exit_code = int(not result.wasSuccessful())
 
@@ -38,7 +37,7 @@ class precleaned_unittest_task(luigi.Task):
             raise Exception('El layout es distinto del que se espera')
         else:
             with self.output().open('w') as output_file:
-                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
+                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month))
 
     def output(self):
         output_path = "s3://{}/precleaned_unittest/DATE={}/{}.csv". \
