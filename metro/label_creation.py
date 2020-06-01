@@ -17,9 +17,6 @@ class label_task(luigi.Task):
 		return label_unittest_task(self.year,self.month,self.station)
 
 	def run(self):
-		station = "station"
-		year = "year"
-		month = "month"
 		date = "date"
 
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
@@ -31,13 +28,12 @@ class label_task(luigi.Task):
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		df = pd.read_csv(StringIO(file_content))
 
-		df[year] = self.year
-		df[month] = self.month
-		df[station] = self.station
-
-		n = floor(df.shape[0] * .7)
-		df = df.sort_values(by = date, axis = 0)
-		df_subset = df[0:n]
+		df['month_year'] = pd.DatetimeIndex(df[date]).to_period('M')
+		dif_months = df['month_year'].unique()
+		num_dif_months = len(dif_months)
+		n = floor(num_dif_months * 0.7)
+		filter_month = dif_months[[n]]
+		df = df[df['month_year']<=filter_month[0]].drop('month_year', axis = 1)
 
 		intquar_ran = interquartile_range()
 		final = intquar_ran.create_label(intquar_ran.join_range(df_subset, intquar_ran.calculate_range(df_subset)))
