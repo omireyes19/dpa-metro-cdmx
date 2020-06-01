@@ -45,6 +45,7 @@ class label_unittest_task(luigi.Task):
 
             df.append(aux, ignore_index=True)
 
+        print("aqui")
         df.head(5)
 
         intquar_ran = interquartile_range()
