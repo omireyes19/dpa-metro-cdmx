@@ -10,11 +10,10 @@ class raw_unittest_task(luigi.Task):
     today = date.today().strftime("%d%m%Y")
     year = luigi.IntParameter()
     month = luigi.IntParameter()
-    station = luigi.Parameter()
 
     def run(self):
         suite = unittest.TestSuite()
-        suite.addTest(ParametrizedCallToAPITest.parametrize(CallToAPITest, year=self.year, month=self.month, station=self.station))
+        suite.addTest(ParametrizedCallToAPITest.parametrize(CallToAPITest, year=self.year, month=self.month))
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         test_exit_code = int(not result.wasSuccessful())
 
@@ -22,11 +21,11 @@ class raw_unittest_task(luigi.Task):
             raise Exception('Los datos que cargaste tienen longitud cero')
         else:
             with self.output().open('w') as output_file:
-                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
+                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month))
 
     def output(self):
         output_path = "s3://{}/raw_unittest/DATE={}/{}.csv". \
-            format(self.bucket_metadata,str(self.year)+"-"+str(self.month),str(self.today))
+            format(self.bucket_metadata, str(self.year)+"-"+str(self.month), str(self.today))
         return luigi.contrib.s3.S3Target(path=output_path)
 
 if __name__ == '__main__':
