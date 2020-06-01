@@ -45,6 +45,7 @@ class label_unittest_task(luigi.Task):
             aux = pd.read_csv(StringIO(file_content))
 
             df.append(aux, ignore_index=True)
+            print("OK")
 
         suite = unittest.TestSuite()
         suite.addTest(ParametrizedLabelTest.parametrize(LabelTest, year=self.year, month=self.month, cleaned_data=df))
