@@ -36,8 +36,6 @@ class label_unittest_task(luigi.Task):
         df = pd.DataFrame()
         for i in range(cut_date):
             reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
-            print(reference_date.year)
-            print(reference_date.month)
 
             obj = s3_resource.Object("dpa-metro-cleaned", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
 
@@ -45,7 +43,6 @@ class label_unittest_task(luigi.Task):
             aux = pd.read_csv(StringIO(file_content))
 
             df.append(aux, ignore_index=True)
-            print("OK")
 
         suite = unittest.TestSuite()
         suite.addTest(ParametrizedLabelTest.parametrize(LabelTest, year=self.year, month=self.month, cleaned_data=df))
