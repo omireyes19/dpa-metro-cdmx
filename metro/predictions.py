@@ -14,8 +14,8 @@ class predictions_task(luigi.Task):
 	today = date.today().strftime("%d%m%Y")
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
-	trained_year = luigi.IntParameter()
-	trained_month = luigi.IntParameter()
+	trained_year = 2020
+	trained_month = 2
 
 	def requires(self):
 		return bias_fairness_task_metadata(self.year,self.month)
@@ -23,10 +23,9 @@ class predictions_task(luigi.Task):
 	def run(self):
 		line = "line"
 		station = "station"
-		influx = "influx"
-		date = "date"
-		month = 'month'
-		year = 'year'
+
+		print(self.trained_year)
+		print(self.trained_month)
 
 		def months_of_history(year, month):
 			day = monthrange(year, month)[1]
