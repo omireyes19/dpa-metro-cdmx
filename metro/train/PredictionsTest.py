@@ -7,4 +7,4 @@ class PredictionsTest(ParametrizedPredictionsTest):
         pred = predictions()
         model = pred.get_predictions(self.X_train, self.y_train)
 
-        self.assertTrue("<class 'sklearn.pipeline.Pipeline'>" == type(model))
+        self.assertTrue("<class 'sklearn.pipeline.Pipeline'>" == str(type(model)))
