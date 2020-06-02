@@ -10,8 +10,6 @@ class call_to_api:
             fecha = str(year)+"-"+str(month).zfill(2)+"-"+str(day+1).zfill(2)
             api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx" \
                       "&q=&rows=-1&sort=-fecha&facet=fecha&refine.fecha="+fecha
-            #api_url = "https://datos.cdmx.gob.mx/api/records/1.0/search/?dataset=afluencia-diaria-del-metro-cdmx" \
-            #          "&q=&rows=-1&sort=-fecha&facet=fecha&facet=ano&facet=linea&facet=estacion&refine.fecha="+fecha
 
             r = requests.get(url = api_url)
             data = r.json()
