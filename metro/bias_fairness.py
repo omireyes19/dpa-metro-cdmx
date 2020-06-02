@@ -34,18 +34,14 @@ class bias_fairness_task(luigi.Task):
 
 		df = df[['date', 'day', 'month', 'station', 'line', 'day_of_week', 'holiday', 'label']]
 
-		df['month_year'] = pd.DatetimeIndex(df['date']).to_period('M')
-		dif_months = df['month_year'].unique()
-		num_dif_months = len(dif_months)
-		n = floor(num_dif_months * 0.7)
-		filter_month = dif_months[[n]]
-		X_test =  df[df['month_year']>filter_month[0]].drop(['month_year', 'label', 'date'], axis = 1)
-		y_test =  df[df['month_year']>filter_month[0]]['label']
+		X_test =  df.drop(['label', 'date'], axis = 1)
 
 		y_pred = model.predict(X_test)
 
+		df["label_predicted"] = y_pred
+
 		with self.output().open('w') as output_file:
-			y_pred.to_csv(output_file)
+			df.to_csv(output_file)
 
 	def output(self):
 		output_path = "s3://{}/training/DATE={}/{}.csv".format(self.bucket_metadata,str(self.year)+"-"+str(self.month),str(self.today))

@@ -24,7 +24,7 @@ class label_task(luigi.Task):
 			d1 = datetime(year, month, day)
 			return (d1.year - 2010) * 12 + d1.month
 
-		cut_date = floor(months_of_history(self.year, self.month) * .7)
+		cut_date = floor(months_of_history(self.year, self.month) * 1)
 
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
