@@ -44,9 +44,8 @@ class label_unittest_task(luigi.Task):
             aux = pd.read_csv(StringIO(file_content))
 
             print(len(aux))
-            print(aux.head(5))
 
-            df.append(aux, ignore_index=True)
+            df = pd.concat([df,aux])
 
             print(len(df))
 
