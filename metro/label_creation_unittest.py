@@ -34,7 +34,7 @@ class label_unittest_task(luigi.Task):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
         s3_resource = ses.resource('s3')
 
-        df = []
+        df = pd.DataFrame()
         for i in range(cut_date):
             reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
 
@@ -44,6 +44,7 @@ class label_unittest_task(luigi.Task):
             aux = pd.read_csv(StringIO(file_content))
 
             print(len(aux))
+            print(aux.head(5))
 
             df.append(aux, ignore_index=True)
 
