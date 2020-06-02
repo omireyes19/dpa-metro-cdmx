@@ -22,9 +22,6 @@ class predictions_task(luigi.Task):
 		line = "line"
 		station = "station"
 
-		print(self.trained_year)
-		print(self.trained_month)
-
 		def months_of_history(year, month):
 			day = monthrange(year, month)[1]
 			d1 = datetime(year, month, day)
