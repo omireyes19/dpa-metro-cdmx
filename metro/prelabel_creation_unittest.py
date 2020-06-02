@@ -6,21 +6,21 @@ import pandas as pd
 from io import StringIO
 from datetime import date
 from math import floor
-from prelabel_creation_metadata import prelabel_task_metadata
+from cleaned_ingest_metadata import cleaned_task_metadata
 from train.ParametrizedLabelTest import ParametrizedLabelTest
 from train.LabelTest import LabelTest
 from datetime import datetime
 from dateutil.relativedelta import *
 from calendar import monthrange
 
-class label_unittest_task(luigi.Task):
+class prelabel_unittest_task(luigi.Task):
     bucket_metadata = 'dpa-metro-metadata'
     today = date.today().strftime("%d%m%Y")
     year = luigi.IntParameter()
     month = luigi.IntParameter()
 
     def requires(self):
-        return prelabel_task_metadata(self.year,self.month)
+        return cleaned_task_metadata(self.year,self.month)
 
     def run(self):
         def months_of_history(year, month):
@@ -37,7 +37,7 @@ class label_unittest_task(luigi.Task):
         for i in range(cut_date):
             reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
 
-            obj = s3_resource.Object("dpa-metro-prelabel", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
+            obj = s3_resource.Object("dpa-metro-cleaned", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
 
             file_content = obj.get()['Body'].read().decode('utf-8')
             aux = pd.read_csv(StringIO(file_content))
@@ -57,7 +57,7 @@ class label_unittest_task(luigi.Task):
                 output_file.write(str(self.today)+","+str(self.year)+","+str(self.month))
 
     def output(self):
-        output_path = "s3://{}/label_unittest/DATE={}/{}.csv". \
+        output_path = "s3://{}/prelabel_unittest/DATE={}/{}.csv". \
             format(self.bucket_metadata,str(self.year)+"-"+str(self.month),str(self.today))
         return luigi.contrib.s3.S3Target(path=output_path)
 

@@ -1,7 +1,7 @@
 import luigi
 import luigi.contrib.s3
 import boto3
-from label_creation_unittest import label_unittest_task
+from prelabel_creation_unittest import prelabel_unittest_task
 from io import StringIO
 import pandas as pd
 from math import floor
@@ -10,13 +10,13 @@ from datetime import datetime
 from dateutil.relativedelta import *
 from calendar import monthrange
 
-class label_task(luigi.Task):
-	bucket = 'dpa-metro-label'
+class prelabel_task(luigi.Task):
+	bucket = 'dpa-metro-prelabel'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
 
 	def requires(self):
-		return label_unittest_task(self.year,self.month)
+		return prelabel_unittest_task(self.year,self.month)
 
 	def run(self):
 		def months_of_history(year, month):
@@ -39,12 +39,8 @@ class label_task(luigi.Task):
 
 			df = pd.concat([df, aux])
 
-		obj = s3_resource.Object("dpa-metro-prelabel", "year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
-		file_content = obj.get()['Body'].read().decode('utf-8')
-		labels = pd.read_csv(StringIO(file_content))
-
 		intquar_ran = interquartile_range()
-		final = intquar_ran.create_label(intquar_ran.join_range(df, labels))
+		final = intquar_ran.calculate_range(df)
 
 		with self.output().open('w') as output_file:
 			final.to_csv(output_file)
