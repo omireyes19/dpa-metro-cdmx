@@ -4,6 +4,7 @@ import boto3
 from training_metadata import training_task_metadata
 from datetime import date
 import pickle
+import pandas as pd
 from io import StringIO
 from io import BytesIO
 
