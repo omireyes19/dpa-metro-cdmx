@@ -2,6 +2,7 @@ import luigi
 import luigi.contrib.s3
 import boto3
 from datetime import date, timedelta, datetime
+import numpy as np
 from math import floor
 from datetime import datetime
 from dateutil.relativedelta import *
