@@ -1,27 +1,17 @@
 from flask import Flask, request
 from flask_restplus import API, Resource
+import boto3
 app = Flask(__name__)
 api = API(app)
 
-predictions = {{'date': '2018-01-06',
-                'line': 'Linea 8',
-                'station': 'Chabacano',
-                'prediction': 2.0},
-               {'date': '2018-01-06',
-                'line': 'Linea 9',
-                'station': 'Chabacano',
-                'prediction': 1.0}
-               {'date': '2018-01-06',
-                'line': 'Linea 2',
-                'station': 'Chabacano',
-                'prediction': 0.0}}
-
-@api.route("/date/<string:date>/line/<string:line>/")
+@api.route("/date/<string:date>")
 class GetPredictions(Resource):
-    def get(self, date, line):
-        return predictions[date,line]
+    def get(self, year, month):
+        ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
+        s3_resource = ses.resource('s3')
 
+        obj = s3_resource.Object("dpa-metro-predictions", "year={}/month={}/{}.csv".format(str(year), str(month).zfill(2), str(year)+str(month).zfill(2)))
 
-
-
-
+        file_content = obj.get()['Body'].read().decode('utf-8')
+        df = pd.read_csv(StringIO(file_content))
+        return df
