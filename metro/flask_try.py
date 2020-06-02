@@ -23,7 +23,6 @@ class GetPredictions(Resource):
         file_content = obj.get()['Body'].read().decode('utf-8')
         df = pd.read_csv(StringIO(file_content))
 
-        buff = StringIO()
-        df.to_json(path_or_buf=buff, orient='records')
-        dfJson=json.loads(buff)
+        dfJson = df.to_json(orient='table')
+
         return dfJson
