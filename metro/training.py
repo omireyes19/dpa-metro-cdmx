@@ -1,6 +1,7 @@
 import luigi
 import luigi.contrib.s3
 import boto3
+import pickle
 from math import floor
 from training_unittest import training_unittest_task
 from train.predictions import predictions
@@ -37,7 +38,7 @@ class training_task(luigi.Task):
 		pred = predictions()
 		final = pred.get_predictions(X_train, y_train)
 
-		with self.output().open('w') as model_file:
+		with self.output().open('wb') as model_file:
 			pickle.dump(final, model_file)
 
 	def output(self):
