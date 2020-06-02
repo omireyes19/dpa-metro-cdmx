@@ -14,8 +14,6 @@ class predictions_task(luigi.Task):
 	today = date.today().strftime("%d%m%Y")
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
-	trained_year = 2020
-	trained_month = 2
 
 	def requires(self):
 		return bias_fairness_task_metadata(self.year,self.month)
@@ -76,11 +74,11 @@ class predictions_task(luigi.Task):
 			df = pd.concat([df, aux])
 
 		with BytesIO() as data:
-			s3_resource.Bucket('dpa-metro-model').download_fileobj("year={}/month={}/{}.pkl".format(str(self.trained_year), str(self.trained_month).zfill(2), str(self.trained_year)+str(self.trained_month).zfill(2)), data)
+			s3_resource.Bucket('dpa-metro-model').download_fileobj("year={}/month={}/{}.pkl".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)), data)
 			data.seek(0)
 			model = pickle.load(data)
 
-		obj = s3_resource.Object("dpa-metro-prelabel", "year={}/month={}/{}.csv".format(str(self.trained_year), str(self.trained_month).zfill(2), str(self.trained_year)+str(self.trained_month).zfill(2)))
+		obj = s3_resource.Object("dpa-metro-prelabel", "year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		labels = pd.read_csv(StringIO(file_content))
 
