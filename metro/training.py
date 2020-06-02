@@ -38,12 +38,12 @@ class training_task(luigi.Task):
 		final = pred.get_predictions(X_train, y_train)
 
 		with self.output().open('wb') as model_file:
-			pickle.dump(final, model_file, format=luigi.format.Nop)
+			pickle.dump(final, model_file)
 
 	def output(self):
 		model_path = "s3://{}/year={}/month={}/{}.pkl".\
 		format(self.bucket_model, str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2))
-		return luigi.contrib.s3.S3Target(path=model_path)
+		return luigi.contrib.s3.S3Target(path=model_path, format=luigi.format.Nop)
 
 
 if __name__ == "__main__":
