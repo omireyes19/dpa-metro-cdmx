@@ -4,6 +4,7 @@ import boto3
 from training_metadata import training_task_metadata
 from datetime import date
 import pickle
+from io import StringIO
 from io import BytesIO
 
 class bias_fairness_task(luigi.Task):
@@ -19,10 +20,15 @@ class bias_fairness_task(luigi.Task):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		with BytesIO() as data:
-			s3_resource.Bucket('dpa-metro-model').download_fileobj("year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)), data)
-			data.seek(0)
-			model = pickle.load(data)
+		obj = s3_resource.Bucket('dpa-metro-model').download_fileobj("year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)), data)
+		file_content = obj.get()
+		model = pickle.load(file_content)
+
+
+		#with BytesIO() as data:
+		#	s3_resource.Bucket('dpa-metro-model').download_fileobj("year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)), data)
+		#	data.seek(0)
+		#	model = pickle.load(data)
 
 		obj = s3_resource.Object("dpa-metro-label", "year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
 
