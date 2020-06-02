@@ -5,6 +5,7 @@ from math import floor
 from datetime import datetime
 from dateutil.relativedelta import *
 from calendar import monthrange
+from train.interquartile_range import interquartile_range
 from bias_fairness_metadata import bias_fairness_task_metadata
 from datetime import date
 from ingest.date_variables import date_variables
