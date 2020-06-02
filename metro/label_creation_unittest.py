@@ -48,7 +48,7 @@ class label_unittest_task(luigi.Task):
         intquar_ran = interquartile_range()
 
         hola = intquar_ran.calculate_range(df)
-        print(hola.columns)
+        #print(hola.columns)
 
         final = intquar_ran.create_label(intquar_ran.join_range(df, intquar_ran.calculate_range(df)))
 
