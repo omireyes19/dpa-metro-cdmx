@@ -56,7 +56,8 @@ threadpoolctl==2.1.0
 thrift==0.13.0
 tornado==5.1.1
 urllib3==1.25.8
-Werkzeug==1.0.1
+Werkzeug==0.16.1
 workalendar==9.0.0
 zipp==3.1.0
 zope.interface==5.0.2
+
