@@ -45,7 +45,7 @@ class bias_fairness_task(luigi.Task):
 	def output(self):
 		output_path = "s3://{}/year={}/month={}/{}.pkl". \
 			format(self.bucket, str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2))
-		return luigi.contrib.s3.S3Target(path=model_path, format=luigi.format.Nop)
+		return luigi.contrib.s3.S3Target(path=output_path, format=luigi.format.Nop)
 
 if __name__ == "__main__":
 	luigi.run()
