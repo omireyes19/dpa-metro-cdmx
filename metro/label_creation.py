@@ -22,7 +22,7 @@ class label_task(luigi.Task):
 		def months_of_history(year, month):
 			day = monthrange(year, month)[1]
 			d1 = datetime(year, month, day)
-			return (d1.year - 2010) * 12 + d1.month
+			return (d1.year - 2016) * 12 + d1.month
 
 		cut_date = floor(months_of_history(self.year, self.month) * 1)
 
@@ -31,7 +31,7 @@ class label_task(luigi.Task):
 
 		df = pd.DataFrame()
 		for i in range(cut_date):
-			reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
+			reference_date = datetime(2016, 1, 1) + relativedelta(months=i)
 			obj = s3_resource.Object("dpa-metro-cleaned", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
 
 			file_content = obj.get()['Body'].read().decode('utf-8')
