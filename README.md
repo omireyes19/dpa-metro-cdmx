@@ -238,12 +238,12 @@ La variable a predecir es la etiqueta de afluencia que creamos 'label', como par
 De manera tentativa se entregará un tablero dinámico en donde el usuario será capaz de ver la predicción de la afluencia diaria por estación del mes siguiente.
 
 ## Anexo 1: Bias and Fariness
-### Atributos protegidos
-A continuación se exponen brevemente las consideraciones realizadas acerca de las variables protegidas Línea del metro, así como cercanía a una hospital, también se comentan las métricas que se emplearán para detectar algún tipo de sesgo que pudiera afectar de manera considerable el impacto de nuestros resultados.
+### Atributo protegido
+A continuación se expone brevemente las consideraciones realizadas acerca de la variable protegida Línea del metro, también se comentan las métricas que se emplearán para detectar algún tipo de sesgo que pudiera afectar de manera considerable el impacto de nuestros resultados.
 
 #### Línea del metro
 Dentro de cada linea del metro, podría darse el caso de que para alguna linea (o algunas lineas) en particular, la mayoría de sus estaciones sean predichas como de baja afluencia, lo cual podría ocasionar que no se le asignen los recursos adecuados a toda la línea, y esto se vea reflejado en un deterioro de todas las estaciones pertenecientes a tal linea. Para evitar este escenario, se utilizará la variable *line* como variable de atributo protegido. De esta manera nos interesa que cada grupo de la variable "protegida" *line* tenga la misma proporción (o una proporción parecida) de etiquetas positivas predichas (TP), para así asegurar que todas las lineas serán consideradas para el otorgamiento de recursos que mejore su servicio.    
-
+ Dicho lo anterior nuestra métrica para medir el bias de la variable protegida será la tasa de falsos positiovs (FPR).
 
 <!--- %#### Cercanía a un hospital
 
