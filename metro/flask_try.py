@@ -8,11 +8,10 @@ import boto3
 app = Flask(__name__)
 api = Api(app)
 
-#@api.route("/date/<string:date>")
-@api.route("/hola")
+@api.route("/date/<string:date>")
 class GetPredictions(Resource):
-    year = 2020
-    month = 2
+    year = date[:4]
+    month = date[4:]
 
     def get(self):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
