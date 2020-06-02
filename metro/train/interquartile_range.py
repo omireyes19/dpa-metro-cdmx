@@ -25,8 +25,8 @@ class interquartile_range:
 
     def calculate_range(self, df):
         stats = self.get_statistics(df)
-        print(stats)
         stats[self.iqr] = stats[self.q3] - stats[self.q1]
+        print(stats.head(5))
         stats[self.min_range] = stats[self.prom] - 1.5 * stats[self.iqr]
         stats[self.max_range] = stats[self.prom] + 1.5 * stats[self.iqr]
         stats = stats[[self.line, self.station, self.min_range, self.max_range]]
