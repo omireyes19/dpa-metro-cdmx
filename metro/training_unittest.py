@@ -16,37 +16,45 @@ class training_unittest_task(PySparkTask):
     today = date.today().strftime("%d%m%Y")
     year = luigi.IntParameter()
     month = luigi.IntParameter()
-    station = luigi.Parameter()
 
     def requires(self):
-        return label_task_metadata(self.year,self.month,self.station)
+        return label_task_metadata(self.year,self.month)
 
     def run(self):
-        spark = SparkSession.builder.appName("Pyspark").getOrCreate()
+        def months_of_history(year, month):
+            day = monthrange(year, month)[1]
+            d1 = datetime(year, month, day)
+            return (d1.year - 2018) * 12 + d1.month
+
+        cut_date = floor(months_of_history(self.year, self.month) * .7)
 
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
         s3_resource = ses.resource('s3')
 
-        obj = s3_resource.Object("dpa-metro-label","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
-        print(ses)
+        df = pd.DataFrame()
+        for i in range(cut_date):
+            reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
+            obj = s3_resource.Object("dpa-metro-label", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
 
-        file_content = obj.get()['Body'].read().decode('utf-8')
-        df = pd.read_csv(StringIO(file_content))
+            file_content = obj.get()['Body'].read().decode('utf-8')
+            aux = pd.read_csv(StringIO(file_content))
+            aux = aux[['date', 'day', 'month', 'station', 'line', 'day_of_week', 'holiday', 'label']]
 
-        df["year"] = self.year
-        df["month"] = self.month
+            df = pd.concat([df, aux])
+
+        X_train = df.drop(['month_year', 'label', 'date'], axis = 1)
+        y_train = df['label']
 
         suite = unittest.TestSuite()
-        suite.addTest(ParametrizedPredictionsTest.parametrize(PredictionsTest, year=self.year, month=self.month,
-                                                       station=self.station, spark=spark,  model_data = df))
+        suite.addTest(ParametrizedPredictionsTest.parametrize(PredictionsTest, X_train=X_train, y_train=y_train))
         result = unittest.TextTestRunner(verbosity=2).run(suite)
         test_exit_code = int(not result.wasSuccessful())
 
         if test_exit_code == 1:
-            raise Exception('La columna de predicciones no se creo correctamente')
+            raise Exception('El modelo no se creó correctamente')
         else:
             with self.output().open('w') as output_file:
-                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month)+","+self.station)
+                output_file.write(str(self.today)+","+str(self.year)+","+str(self.month))
 
     def output(self):
         output_path = "s3://{}/model_unittest/DATE={}/{}.csv". \

@@ -5,7 +5,6 @@ from train.ParametrizedPredictionsTest import ParametrizedPredictionsTest
 class PredictionsTest(ParametrizedPredictionsTest):
     def test_predictions(self):
         pred = predictions()
-        predictions_df = pred.get_predictions(self.spark, self.model_data)
-        column_names_df = predictions_df.columns.tolist()
+        model = pred.get_predictions(self.X_train, self.y_train)
 
-        self.assertTrue("prediction" in column_names_df)
+        self.assertTrue("sklearn.pipeline.Pipeline" == type(model))

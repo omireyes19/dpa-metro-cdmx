@@ -5,59 +5,51 @@ from training_unittest import training_unittest_task
 from train.predictions import predictions
 from io import StringIO
 import pandas as pd
-from luigi.contrib.spark import PySparkTask
-from pyspark.sql import SparkSession
 
-
-class training_task(PySparkTask):
+class training_task(luigi.Task):
 	bucket = 'dpa-metro-training'
 	bucket_model = 'dpa-metro-model'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
-	station = luigi.Parameter()
 
 	def requires(self):
-		return training_unittest_task(self.year,self.month,self.station)
+		return training_unittest_task(self.year, self.month)
 
 	def run(self):
-		spark = SparkSession.builder.appName("Pyspark").getOrCreate()
+		def months_of_history(year, month):
+			day = monthrange(year, month)[1]
+			d1 = datetime(year, month, day)
+			return (d1.year - 2018) * 12 + d1.month
+
+		cut_date = floor(months_of_history(self.year, self.month) * .7)
 
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		obj = s3_resource.Object("dpa-metro-label","year={}/month={}/station={}/{}.csv".format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', '')))
-		print(ses)
+		df = pd.DataFrame()
+		for i in range(cut_date):
+			reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
+			obj = s3_resource.Object("dpa-metro-label", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
 
-		file_content = obj.get()['Body'].read().decode('utf-8')
-		df = pd.read_csv(StringIO(file_content))
+			file_content = obj.get()['Body'].read().decode('utf-8')
+			aux = pd.read_csv(StringIO(file_content))
+			aux = aux[['date', 'day', 'month', 'station', 'line', 'day_of_week', 'holiday', 'label']]
 
-		df["year"] = self.year
-		df["month"] = self.month
+			df = pd.concat([df, aux])
 
-		predict = predictions()
-		predictions_df = predict.get_predictions(spark, df)
+		X_train = df.drop(['month_year', 'label', 'date'], axis = 1)
+		y_train = df['label']
 
-		with self.output()["predictions"].open('w') as predictions_file:
-			predictions_df.to_csv(predictions_file)
+		pred = predictions()
+		final = pred.get_predictions(X_train, y_train)
 
-		#pickle_byte_obj = pickle.dumps(cvModel.bestModel)
-
-		#key = "year={}/month={}/station={}/{}.pkl".\
-		#format(str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		#s3_resource.Object(self.bucket_model,key).put(Body=pickle_byte_obj)
-
-		#with self.output()["model"].open('wb') as model_file:
-		#	pickle.dump(cvModel.bestModel, model_file)
+		with self.output().open('wb') as model_file:
+			pickle.dump(final, model_file, format=luigi.format.Nop)
 
 	def output(self):
-		output_path = "s3://{}/year={}/month={}/station={}/{}.csv".\
-		format(self.bucket,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-
-		#model_path = "s3://{}/year={}/month={}/station={}/{}.pkl".\
-		#format(self.bucket_model,str(self.year),str(self.month).zfill(2),self.station,self.station.replace(' ', ''))
-		return {"predictions":luigi.contrib.s3.S3Target(path=output_path)
-				#,"model":luigi.contrib.s3.S3Target(path=model_path)
-				}
+		model_path = "s3://{}/year={}/month={}/{}.pkl".\
+		format(self.bucket_model, str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2))
+		return luigi.contrib.s3.S3Target(path=model_path)
 
 
 if __name__ == "__main__":
