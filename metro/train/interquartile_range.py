@@ -14,17 +14,17 @@ class interquartile_range:
     prom = "mean"
     date = "date"
 
-    def percentile(n):
+    def percentile(self, n):
         def percentile_(x):
             return np.percentile(x, n)
         percentile_.__name__ = 'percentile_%s' % n
         return percentile_
 
-    def get_statistics(self,df):
-        return df.groupby([self.line, self.station]).agg([percentile(.25), percentile(.75), 'mean'])[self.influx].reset_index()
+    def get_statistics(self, df):
+        return df.groupby([self.line, self.station]).agg([self.percentile(.25), self.percentile(.75), 'mean'])[self.influx].reset_index()
 
-    def calculate_range(self,df):
-        stats = get_statistics(df)
+    def calculate_range(self, df):
+        stats = self.get_statistics(df)
         stats[self.iqr] = stats[self.q3] - stats[self.q1]
         stats[self.min_range] = stats[self.prom] - 1.5 * stats[self.iqr]
         stats[self.max_range] = stats[self.prom] + 1.5 * stats[self.iqr]
