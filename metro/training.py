@@ -11,7 +11,6 @@ from io import StringIO
 import pandas as pd
 
 class training_task(luigi.Task):
-	bucket = 'dpa-metro-training'
 	bucket_model = 'dpa-metro-model'
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
@@ -20,29 +19,23 @@ class training_task(luigi.Task):
 		return training_unittest_task(self.year, self.month)
 
 	def run(self):
-		def months_of_history(year, month):
-			day = monthrange(year, month)[1]
-			d1 = datetime(year, month, day)
-			return (d1.year - 2018) * 12 + d1.month
-
-		cut_date = floor(months_of_history(self.year, self.month) * .7)
-
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
 
-		df = pd.DataFrame()
-		for i in range(cut_date):
-			reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
-			obj = s3_resource.Object("dpa-metro-label", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
+		obj = s3_resource.Object("dpa-metro-label", "year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
 
-			file_content = obj.get()['Body'].read().decode('utf-8')
-			aux = pd.read_csv(StringIO(file_content))
-			aux = aux[['date', 'day', 'month', 'station', 'line', 'day_of_week', 'holiday', 'label']]
+		file_content = obj.get()['Body'].read().decode('utf-8')
+		df = pd.read_csv(StringIO(file_content))
 
-			df = pd.concat([df, aux])
+		df = df[['date', 'day', 'month', 'station', 'line', 'day_of_week', 'holiday', 'label']]
 
-		X_train = df.drop(['month_year', 'label', 'date'], axis = 1)
-		y_train = df['label']
+		df['month_year'] = pd.DatetimeIndex(df['date']).to_period('M')
+		dif_months = df['month_year'].unique()
+		num_dif_months = len(dif_months)
+		n = floor(num_dif_months * 0.7)
+		filter_month = dif_months[[n]]
+		X_train = df[df['month_year']<=filter_month[0]].drop(['month_year', 'label', 'date'], axis = 1)
+		y_train =  df[df['month_year']<=filter_month[0]]['label']
 
 		pred = predictions()
 		final = pred.get_predictions(X_train, y_train)

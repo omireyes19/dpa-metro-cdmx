@@ -26,7 +26,7 @@ class label_unittest_task(luigi.Task):
         def months_of_history(year, month):
             day = monthrange(year, month)[1]
             d1 = datetime(year, month, day)
-            return (d1.year - 2018) * 12 + d1.month
+            return (d1.year - 2010) * 12 + d1.month
 
         cut_date = floor(months_of_history(self.year, self.month) * .7)
 
