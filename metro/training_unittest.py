@@ -2,6 +2,7 @@ import luigi
 import luigi.contrib.s3
 import boto3
 import unittest
+from math import floor
 import pandas as pd
 from io import StringIO
 from datetime import date

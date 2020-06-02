@@ -1,6 +1,7 @@
 import luigi
 import luigi.contrib.s3
 import boto3
+from math import floor
 from training_unittest import training_unittest_task
 from train.predictions import predictions
 from io import StringIO
