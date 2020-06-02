@@ -33,7 +33,7 @@ class predictions_task(luigi.Task):
 			return (d1.year - 2019) * 12 + d1.month
 
 		def first_day_of_month(month, year):
-			fdom = '01-' + month + '-' + year
+			fdom = '01-' + str(month).zfill(2) + '-' + str(year)
 			return fdom
 
 		def get_stations_and_lines(df):
