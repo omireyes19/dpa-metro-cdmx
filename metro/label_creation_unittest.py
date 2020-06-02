@@ -34,7 +34,7 @@ class label_unittest_task(luigi.Task):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
         s3_resource = ses.resource('s3')
 
-        df = pd.DataFrame()
+        df = []
         for i in range(cut_date):
             reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
 
