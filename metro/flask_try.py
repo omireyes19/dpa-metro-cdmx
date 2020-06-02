@@ -8,11 +8,14 @@ api = Api(app)
 #@api.route("/date/<string:date>")
 @api.route("/hola")
 class GetPredictions(Resource):
-    def get(self, year, month):
+    year = 2020
+    month = 2
+
+    def get(self):
         ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
         s3_resource = ses.resource('s3')
 
-        obj = s3_resource.Object("dpa-metro-predictions", "year={}/month={}/{}.csv".format(str(year), str(month).zfill(2), str(year)+str(month).zfill(2)))
+        obj = s3_resource.Object("dpa-metro-predictions", "year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
 
         file_content = obj.get()['Body'].read().decode('utf-8')
         df = pd.read_csv(StringIO(file_content))
