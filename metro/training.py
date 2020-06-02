@@ -38,7 +38,7 @@ class training_task(luigi.Task):
 		pred = predictions()
 		final = pred.get_predictions(X_train, y_train)
 
-		with self.output().open('wb') as model_file:
+		with self.output().open('w') as model_file:
 			pickle.dump(final, model_file)
 
 	def output(self):
