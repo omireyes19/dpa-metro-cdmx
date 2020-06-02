@@ -1,7 +1,7 @@
-from flask import Flask, request
+from flask import Flask
 from flask_restplus import API, Resource
-from werkzeug.utils import cached_property
 import boto3
+
 app = Flask(__name__)
 api = API(app)
 
