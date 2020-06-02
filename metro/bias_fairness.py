@@ -1,5 +1,6 @@
 import luigi
 import luigi.contrib.s3
+import boto3
 from training_metadata import training_task_metadata
 from datetime import date
 import pickle
