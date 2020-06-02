@@ -1,6 +1,7 @@
 import luigi
 import luigi.contrib.s3
 import boto3
+from math import floor
 from bias_fairness_metadata import bias_fairness_task_metadata
 from datetime import date
 from ingest.date_variables import date_variables
