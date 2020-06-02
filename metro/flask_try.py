@@ -1,9 +1,9 @@
 from flask import Flask
-from flask_restplus import API, Resource
+from flask_restplus import Api, Resource
 import boto3
 
 app = Flask(__name__)
-api = API(app)
+api = Api(app)
 
 @api.route("/date/<string:date>")
 class GetPredictions(Resource):
