@@ -23,7 +23,7 @@ class bias_fairness_task(luigi.Task):
 		print("aqui"+"year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
 		obj = s3_resource.Object("dpa-metro-model", "year={}/month={}/{}.pkl".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
 		file_content = obj.get()
-		model = pickle.load(file_content)
+		pickle.load(open(file_content, 'rb'))
 
 
 		#with BytesIO() as data:
