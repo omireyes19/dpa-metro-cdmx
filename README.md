@@ -235,9 +235,9 @@ La variable a predecir es la etiqueta de afluencia que creamos 'label', como par
 
 ## Planteamiento del entregable del proyecto
 
-De manera tentativa se entregará una API, así como un tablero dinámico el cual será desarrollado con el proposito de monitorear el modelo comportamiento del modelo realizado. 
+De manera tentativa se entregará una API, así como un tablero dinámico el cual es desarrollado con el proposito de monitorear el modelo comportamiento del modelo realizado. En dicho tablero dinámico, el usuario puede seleccionar el día, la linea y estación del metro de su preferencia con el fin de ver la predicción de la afluencia diaria por estación del mes siguiente.
 
-en donde el usuario será capaz de ver la predicción de la afluencia diaria por estación del mes siguiente.
+Así mismo, el tablero dinámico muestra las metricas de verdaderos positivos, falsos positivos, verdaderos negativos y falsos negativos con el fin de monitorear las metricas establecidas por Bias and Fairness.
 
 
 ![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dash1.png)
