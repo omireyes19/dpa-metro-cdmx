@@ -32,15 +32,12 @@ class label_task(luigi.Task):
 		df = pd.DataFrame()
 		for i in range(cut_date):
 			reference_date = datetime(2010, 1, 1) + relativedelta(months=i)
-			print(reference_date.year)
-			print(reference_date.month)
-
 			obj = s3_resource.Object("dpa-metro-cleaned", "year={}/month={}/{}.csv".format(str(reference_date.year), str(reference_date.month).zfill(2), str(reference_date.year)+str(reference_date.month).zfill(2)))
 
 			file_content = obj.get()['Body'].read().decode('utf-8')
 			aux = pd.read_csv(StringIO(file_content))
 
-			df.append(aux, ignore_index=True)
+			df = pd.concat([df, aux])
 
 		intquar_ran = interquartile_range()
 		final = intquar_ran.create_label(intquar_ran.join_range(df, intquar_ran.calculate_range(df)))
