@@ -5,12 +5,11 @@ from training_metadata import training_task_metadata
 from datetime import date
 import pickle
 import pandas as pd
-from math import floor
 from io import StringIO
 from io import BytesIO
 
 class bias_fairness_task(luigi.Task):
-	bucket_metadata = 'dpa-metro-biasfairness'
+	bucket = 'dpa-metro-biasfairness'
 	today = date.today().strftime("%d%m%Y")
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
@@ -44,8 +43,9 @@ class bias_fairness_task(luigi.Task):
 			df.to_csv(output_file)
 
 	def output(self):
-		output_path = "s3://{}/training/DATE={}/{}.csv".format(self.bucket_metadata,str(self.year)+"-"+str(self.month),str(self.today))
-		return luigi.contrib.s3.S3Target(path=output_path)
+		output_path = "s3://{}/year={}/month={}/{}.pkl". \
+			format(self.bucket, str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2))
+		return luigi.contrib.s3.S3Target(path=model_path, format=luigi.format.Nop)
 
 if __name__ == "__main__":
 	luigi.run()
