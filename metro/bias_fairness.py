@@ -5,6 +5,7 @@ from training_metadata import training_task_metadata
 from datetime import date
 import pickle
 import pandas as pd
+from math import floor
 from io import StringIO
 from io import BytesIO
 
@@ -20,11 +21,6 @@ class bias_fairness_task(luigi.Task):
 	def run(self):
 		ses = boto3.session.Session(profile_name='omar', region_name='us-east-1')
 		s3_resource = ses.resource('s3')
-
-		#obj = s3_resource.Object("dpa-metro-model", "year={}/month={}/{}.pkl".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
-		#file_content = obj.get()
-		#pickle.load(open(file_content, 'rb'))
-
 
 		with BytesIO() as data:
 			s3_resource.Bucket('dpa-metro-model').download_fileobj("year={}/month={}/{}.pkl".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)), data)
