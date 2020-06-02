@@ -26,7 +26,7 @@ class predictions_task(luigi.Task):
 			data.seek(0)
 			model = pickle.load(data)
 
-		obj = s3_resource.Object("dpa-metro-biasfairness", "year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
+		obj = s3_resource.Object("dpa-metro-predictions", "year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
 
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		df = pd.read_csv(StringIO(file_content))
