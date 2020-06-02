@@ -45,9 +45,9 @@ class label_unittest_task(luigi.Task):
 
             df = pd.concat([df, aux])
 
-        print(df.head(5))
-
         intquar_ran = interquartile_range()
+
+        print(intquar_ran.calculate_range(df).columns)
         final = intquar_ran.create_label(intquar_ran.join_range(df, intquar_ran.calculate_range(df)))
 
         suite = unittest.TestSuite()
