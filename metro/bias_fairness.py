@@ -21,7 +21,7 @@ class bias_fairness_task(luigi.Task):
 		s3_resource = ses.resource('s3')
 
 		print("aqui"+"year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
-		obj = s3_resource.Object("dpa-metro-model", "year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
+		obj = s3_resource.Object("dpa-metro-model", "year={}/month={}/{}.pkl".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
 		file_content = obj.get()
 		model = pickle.load(file_content)
 
