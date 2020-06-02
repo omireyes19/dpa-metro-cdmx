@@ -43,13 +43,8 @@ class label_unittest_task(luigi.Task):
             file_content = obj.get()['Body'].read().decode('utf-8')
             aux = pd.read_csv(StringIO(file_content))
 
-            print(len(aux))
+            df = pd.concat([df, aux])
 
-            df = pd.concat([df,aux])
-
-            print(len(df))
-
-        print("aqui")
         print(df.head(5))
 
         intquar_ran = interquartile_range()
