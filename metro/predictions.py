@@ -115,8 +115,10 @@ class predictions_task(luigi.Task):
 				val = "Bajo"
 			elif row['label'] == 2:
 				val = "Medio"
-			else:
+			elif row['label'] == 3:
 				val = "Alto"
+			else:
+				val = "NA"
 			return val
 
 		def label_predicted_rename(row):
@@ -124,8 +126,10 @@ class predictions_task(luigi.Task):
 				val = "Bajo"
 			elif row['label_predicted'] == 2:
 				val = "Medio"
-			else:
+			elif row['label_predicted'] == 3:
 				val = "Alto"
+			else:
+				val = "NA"
 			return val
 
 		df = df[['date', 'line', 'station', 'label', 'label_predicted']]
