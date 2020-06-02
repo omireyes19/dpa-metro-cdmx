@@ -99,6 +99,7 @@ class predictions_task(luigi.Task):
 		date_var = date_variables()
 		df_date = date_var.add_date_variables(new_month_df)
 
+		df_date = df_date[['date', 'day', 'month', 'station', 'line', 'day_of_week', 'holiday', 'label']]
 		final = pd.concat([df, df_date])
 
 		X_test =  final.drop(['label', 'date'], axis = 1)
