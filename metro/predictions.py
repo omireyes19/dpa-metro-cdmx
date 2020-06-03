@@ -21,6 +21,8 @@ class predictions_task(luigi.Task):
 	today = date.today().strftime("%d%m%Y")
 	year = luigi.IntParameter()
 	month = luigi.IntParameter()
+	train_year = luigi.IntParameter()
+	train_month = luigi.IntParameter()
 
 	def requires(self):
 		return prelabel_task_metadata(self.year,self.month)
@@ -28,6 +30,9 @@ class predictions_task(luigi.Task):
 	def run(self):
 		line = "line"
 		station = "station"
+
+		print(self.train_month)
+		print(self.train_year)
 
 		def months_of_history(year, month):
 			day = monthrange(year, month)[1]
