@@ -230,6 +230,16 @@ La metadata que estaríamos generando en este paso es la siguiente:
 ### 3. Transformation: Transformamos los datos de json a parquet y damos una estructura hdfs. La estructura de directorios está definida por el particionamiento de las variables *fecha* y *estación*. Además, añadimos como variables el mes, el día del mes y con cuántas líneas cruza la estación, junto con variables dicotómicas correspondientes a día de la semana, día festivo y fin de semana.
 ### 4. Creamos la variable objetivo 'label' a partir de los datos históricos por línea y estación y asignamos las etiquetas 1: afluencia baja, 2: afluencia normal y 3: afluencia alta.
 
+
+## Pruebas unitarias
+En total contamos con 6 pruebas unitarias: 
+1. test_records_not_empty: validamo que la consulta a la API no esté vacía.
+2. test_full_layout: validamos que tengamos el número correcto de columnas.
+3. test_date_cols_created: validamos que se construyan las variables de Feature Engenieering.
+4. test_label_creation: validamos el rango de la etiqueta a predecir.
+5. test_influx_values: validamos que los datos de afluencia no sean negativos.
+6. test_predictions: validamos que se construyan las predicciones.
+
 ## Modelado
 La variable a predecir es la etiqueta de afluencia que creamos 'label', como parte de la preparación de datos, utilizamos one hot encoder para transformar las variables dia de la semana, linea y estacion y utilizamos un Random Forest para hacer clasificación multiclase.
 
@@ -241,6 +251,16 @@ Así mismo, el tablero dinámico muestra las metricas de verdaderos positivos, f
 
 
 ![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dash1.png)
+
+## DAG
+Dag del entrenamiento:
+![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_train_1.jpeg)
+![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_train_2.jpeg)
+![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_train_3.jpeg)
+
+Dag de las predicciones:
+![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_pred_1.jpeg)
+![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_pred_2.jpeg)
 
 ## Anexo 1: Bias and Fariness
 ### Atributo protegido
