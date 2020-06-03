@@ -13,7 +13,7 @@ from datetime import datetime
 from dateutil.relativedelta import *
 from calendar import monthrange
 
-class prelabel_unittest_task(luigi.Task):
+class prediction_unittest_task(luigi.Task):
     bucket_metadata = 'dpa-metro-metadata'
     today = date.today().strftime("%d%m%Y")
     year = luigi.IntParameter()
