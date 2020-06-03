@@ -22,4 +22,3 @@ class training_task_metadata(luigi.Task):
 
 if __name__ == "__main__":
 	luigi.run()
-
