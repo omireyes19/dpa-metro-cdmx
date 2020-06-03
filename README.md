@@ -254,13 +254,13 @@ Así mismo, el tablero dinámico muestra las metricas de verdaderos positivos, f
 
 ## DAG
 Dag del entrenamiento:
-![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_train_1.jpeg)
-![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_train_2.jpeg)
-![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_train_3.jpeg)
+![Image description](https://github.com/mfrubio/dpa-metro-cdmx/blob/master/images/dag_train_1.jpeg)
+![Image description](https://github.com/mfrubio/dpa-metro-cdmx/blob/master/images/dag_train_2.jpeg)
+![Image description](https://github.com/mfrubio/dpa-metro-cdmx/blob/master/images/dag_train_3.jpeg)
 
 Dag de las predicciones:
-![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_pred_1.jpeg)
-![Image description](https://github.com/omireyes19/dpa-metro-cdmx/blob/master/images/dag_pred_2.jpeg)
+![Image description](https://github.com/mfrubio/dpa-metro-cdmx/blob/master/images/dag_pred_1.jpeg)
+![Image description](https://github.com/mfrubio/dpa-metro-cdmx/blob/master/images/dag_pred_2.jpeg)
 
 ## Anexo 1: Bias and Fariness
 ### Atributo protegido
