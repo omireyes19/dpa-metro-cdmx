@@ -8,7 +8,7 @@ from datetime import datetime
 from dateutil.relativedelta import *
 from calendar import monthrange
 from train.interquartile_range import interquartile_range
-from prelabel_creation_metadata import prelabel_task_metadata
+from predictions_unittest import predictions_unittest_task
 from datetime import date
 from ingest.date_variables import date_variables
 import pickle
@@ -25,7 +25,7 @@ class predictions_task(luigi.Task):
 	trainmonth = luigi.IntParameter()
 
 	def requires(self):
-		return prelabel_task_metadata(self.year,self.month)
+		return predictions_unittest_task(self.year, self.month)
 
 	def run(self):
 		line = "line"
