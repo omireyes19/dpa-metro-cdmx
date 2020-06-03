@@ -8,7 +8,7 @@ from datetime import datetime
 from dateutil.relativedelta import *
 from calendar import monthrange
 from train.interquartile_range import interquartile_range
-from bias_fairness_metadata import bias_fairness_task_metadata
+from prelabel_creation_metadata import prelabel_task_metadata
 from datetime import date
 from ingest.date_variables import date_variables
 import pickle
@@ -23,7 +23,7 @@ class predictions_task(luigi.Task):
 	month = luigi.IntParameter()
 
 	def requires(self):
-		return bias_fairness_task_metadata(self.year,self.month)
+		return prelabel_task_metadata(self.year,self.month)
 
 	def run(self):
 		line = "line"
