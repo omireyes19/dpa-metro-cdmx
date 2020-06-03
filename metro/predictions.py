@@ -31,9 +31,6 @@ class predictions_task(luigi.Task):
 		line = "line"
 		station = "station"
 
-		print(self.train_month)
-		print(self.train_year)
-
 		def months_of_history(year, month):
 			day = monthrange(year, month)[1]
 			d1 = datetime(year, month, day)
@@ -83,11 +80,11 @@ class predictions_task(luigi.Task):
 			df = pd.concat([df, aux])
 
 		with BytesIO() as data:
-			s3_resource.Bucket('dpa-metro-model').download_fileobj("year={}/month={}/{}.pkl".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)), data)
+			s3_resource.Bucket('dpa-metro-model').download_fileobj("year={}/month={}/{}.pkl".format(str(self.trainyear), str(self.trainmonth).zfill(2), str(self.trainyear)+str(self.trainmonth).zfill(2)), data)
 			data.seek(0)
 			model = pickle.load(data)
 
-		obj = s3_resource.Object("dpa-metro-prelabel", "year={}/month={}/{}.csv".format(str(self.year), str(self.month).zfill(2), str(self.year)+str(self.month).zfill(2)))
+		obj = s3_resource.Object("dpa-metro-prelabel", "year={}/month={}/{}.csv".format(str(self.trainyear), str(self.trainmonth).zfill(2), str(self.trainyear)+str(self.trainmonth).zfill(2)))
 		file_content = obj.get()['Body'].read().decode('utf-8')
 		labels = pd.read_csv(StringIO(file_content))
 
