@@ -58,7 +58,7 @@ skyfield-data==0.1.0
 threadpoolctl==2.1.0
 thrift==0.13.0
 tornado==5.1.1
-urllib3==1.25.8
+urllib3==1.26.5
 Werkzeug==0.16.1
 workalendar==9.0.0
 zipp==3.1.0
